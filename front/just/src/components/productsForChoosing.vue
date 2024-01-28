@@ -5,7 +5,7 @@ const store = useCentralStore();
 
 <template>
   <div class="big-layer" @click="store.cartOpen = false">
-    <div class="card">
+    <div class="card" v-if="store.items.length">
       <h5 class="card-header">Mahsulotlar</h5>
       <div class="list col mt-md">
         <div
@@ -21,6 +21,7 @@ const store = useCentralStore();
         </div>
       </div>
     </div>
+    <h2 class="error" v-else>Mahsulot mavjud emas!</h2>
   </div>
 </template>
 <style scoped>
@@ -45,5 +46,8 @@ const store = useCentralStore();
   width: auto;
   height: 600px;
   overflow: auto;
+}
+.error {
+  width: 300px;
 }
 </style>

@@ -10,7 +10,8 @@ export const useCentralStore = defineStore('central', {
     cartOpen: false,
     productsFromStorage: JSON.parse(localStorage.getItem('productsForSell')) || [],
     check: [],
-    clients: [],
+    clients: JSON.parse(localStorage.getItem('clients')) || [],
+    clientIndex: 0
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -89,7 +90,10 @@ export const useCentralStore = defineStore('central', {
         product.quantity = ''
 
         this.cartOpen = false
-
+        if (this.clients.length > 1) {
+          this.clients[this.clientIndex].unshift(product)
+          localStorage.setItem('client', JSON.stringify(this.clients))
+        }
       } else {
         product.quantity++
         this.cartOpen = false
@@ -154,7 +158,7 @@ export const useCentralStore = defineStore('central', {
         localStorage.setItem('productsForSell', JSON.stringify(item))
         this.getProductFromStorage()
         this.itemsForSell = []
-
+        this.deleteClient(this.clientIndex)
       }
 
 
@@ -164,27 +168,45 @@ export const useCentralStore = defineStore('central', {
       this.productsFromStorage = JSON.parse(localStorage.getItem("productsForSell"));
       console.log(this.productsFromStorage);
     },
-    addClient(index) {
+    createNewClient() {
+      this.clients.unshift([])
+      this.getClient(0)
+      this.setItemToStorage('clients', this.clients)
+    },
+    setItemToStorage(name, param) {
+      localStorage.setItem(name, JSON.stringify(param));
+    },
+    getItemFromStorage(name) {
+      return JSON.parse(localStorage.getItem(name));
+    },
+    addClient() {
       if (this.itemsForSell.length) {
 
         let clients = JSON.parse(localStorage.getItem('clients')) || []
         clients.unshift(this.itemsForSell)
         localStorage.setItem('clients', JSON.stringify(clients))
-        this.clients = JSON.parse(localStorage.getItem('clients'))
+        this.clients = clients
         console.log(clients);
         this.itemsForSell = []
       }
       else {
-        alert("iltimos mahsulot qo'shing")
+        return
       }
     },
-    getClients(index) {
+    getClient(index) {
       console.log(index);
-      let client = this.clients[index]
+      let choosedClient = this.clients[index]
       this.itemsForSell = []
-      client.map((cli) => {
-        this.itemsForSell.unshift(cli)
+      this.clientIndex = index
+      console.log(this.clientIndex);
+      choosedClient.map((cli) => {
+        this.itemsForSell.push(cli)
       })
+    },
+    deleteClient(index) {
+      this.clients.splice(index, 1)
+      localStorage.setItem('clients', JSON.stringify(this.clients));
+      this.itemsForSell = []
     }
   },
 })

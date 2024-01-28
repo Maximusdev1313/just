@@ -13,26 +13,48 @@ const { clients, index } = toRefs(props);
 
 <template>
   <div class="">
-    <button
-      @click="store.addClient(clients.length)"
-      class="ma-md"
-      type="button"
-    >
-      add
-    </button>
-
-    <div class="card">
+    <div class="card" v-if="clients.length">
       <div
         class="client hover"
         v-for="(client, index) in clients"
         :key="index"
-        @click="store.getClients(index)"
+        @click="store.getClient(index)"
       >
-        {{ index + 1 }}-Mijoz
+        <div class="flex between">
+          <div class="">{{ index + 1 }}-Mijoz</div>
+          <div class="">Soni: {{ client.length }}</div>
+        </div>
         <div class="" v-for="cli in client" :key="cli">
           {{ cli.name }}
         </div>
       </div>
+    </div>
+    <div class="flex around">
+      <button
+        @click="store.addClient(clients.length)"
+        class="ma-md button"
+        type="button"
+        v-if="!clients.length"
+      >
+        Qo'shish
+      </button>
+      <button
+        @click="store.createNewClient()"
+        class="ma-md button"
+        type="button"
+        v-if="clients.length"
+      >
+        Qo'shish
+      </button>
+
+      <button
+        v-if="clients.length"
+        @click="store.deleteClient(store.clientIndex)"
+        class="ma-md button"
+        type="button"
+      >
+        <i class="fa-solid fa-trash"></i>
+      </button>
     </div>
   </div>
 </template>
@@ -50,5 +72,8 @@ const { clients, index } = toRefs(props);
   overflow: auto;
   max-height: 400px;
   padding: auto;
+}
+.button {
+  width: 90%;
 }
 </style>

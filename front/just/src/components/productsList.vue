@@ -14,12 +14,16 @@ const focusInput = async () => {
 };
 onMounted(() => {
   document.addEventListener("keypress", function (event) {
+    console.log(event.key);
     var charCode = event.which ? event.which : event.keyCode;
     if (
       (charCode >= 48 && charCode <= 57 && store?.itemsForSell.length) ||
       event.key == "."
     ) {
       focusInput();
+    }
+    if (event.key == "+") {
+      store.addClient();
     }
   });
 });
@@ -70,6 +74,10 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
+.name {
+  width: 80%;
+  overflow: auto;
+}
 h4 {
   margin: 0;
 }
