@@ -1,20 +1,32 @@
 {
+    "name": "express-static-website",
     "version": 2,
-    "builds":[
-        {
-            "src": "./app.js",
-            "use": "@vercel/node"
-        }
+    "public": true,
+    "builds": [
+      {
+        "src": "app.js",
+        "use": "@vercel/node"
+      },
+      
+      {
+        "src": "public/**",
+        "use": "@vercel/static"
+      }
     ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
-    ],"rewrites": [
+    "rewrites": [
         {
             "source": "/(.*)",
             "destination": "/$1"
         }
+    ],
+    "routes": [
+      {
+        "src": "/((?!.*\\.\\w+$).*)",
+        "dest": "/app.js"
+      },
+      {
+        "src": "/(.+\\.[a-z]+)$",
+        "dest": "/$1"
+      }
     ]
-}
+  }
