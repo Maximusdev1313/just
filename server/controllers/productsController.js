@@ -1,50 +1,50 @@
-const Post = require('../models/products')
+const Product = require('../models/products/products')
 var fs = require('fs');
 const path = require('path');
 const asyncHandler = require("express-async-handler");
 
 module.exports = class Products {
     // fetch all posts
-    static fetchAllPosts = asyncHandler(async (req, res) => {
+    static fetchAllProducts = asyncHandler(async (req, res) => {
         try {
-            const posts = await Post.find()
-            res.status(200).json(posts)
+            const products = await Product.find()
+            res.status(200).json(products)
         } catch (err) {
             res.status(404).json({ message: err.message })
         }
     })
 
 
-    static fetchPostId = asyncHandler(async (req, res) => {
+    static fetchProductsId = asyncHandler(async (req, res) => {
         const id = req.params.id
         try {
-            const post = await Post.findById(id)
-            res.status(200).json(post)
+            const products = await Products.findById(id)
+            res.status(200).json(products)
         } catch (error) {
             res.status(404).json({ message: error.message })
         }
     })
 
-    static createPost = asyncHandler(async (req, res) => {
-        const post = req.body
+    static createProducts = asyncHandler(async (req, res) => {
+        const products = req.body
         if (req.file !== undefined) {
             const imagename = req.file.filename
 
-            post.image = imagename
+            products.image = imagename
         }
 
         try {
-            await Post.create(post)
-            res.status(201).json({ message: 'post created' })
+            await Products.create(products)
+            res.status(201).json({ message: 'products created' })
         } catch (error) {
             res.status(400).json({ message: error.message })
         }
     })
 
-    static async updatePost(req, res) {
+    static async updateProducts(req, res) {
         const id = req.params.id;
         let new_image = '';
-        const old_post = await Post.findById(id);
+        const old_products = await Products.findById(id);
         if (req.file) {
             // Delete old image file
             // fs.unlink(path.join(__dirname, '../uploads/', old_post.image), err => {
@@ -59,41 +59,41 @@ module.exports = class Products {
         } else {
             new_image = req.body.old_image;
         }
-        const newPost = req.body;
-        newPost.image = new_image;
-        newPost.quantity_in_store = old_post.quantity_in_store + Number(newPost.quantity_in_store);
+        const newProducts = req.body;
+        newProducts.image = new_image;
+        newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity_in_store);
         try {
             console.log(req.body);
-            await Post.findByIdAndUpdate(id, newPost);
+            await Products.findByIdAndUpdate(id, newProducts);
             res.status(200).json({ message: 'updated successfully' });
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
     }
-    static async decrementPostQuantity(req, res) {
+    static async decrementProductsQuantity(req, res) {
         const id = req.params.id
-        const new_post = req.body
-        const old_post = await Post.findById(id)
+        const new_Products = req.body
+        const old_Products = await Products.findById(id)
 
-        new_post.quantity_in_store = (old_post.quantity_in_store - new_post.quantity).toFixed(1)
-        new_post.quantity = 0
+        new_Products.quantity_in_store = (old_Products.quantity_in_store - new_Products.quantity).toFixed(1)
+        new_Products.quantity = 0
         try {
-            let post = await Post.findByIdAndUpdate(
+            let Products = await Products.findByIdAndUpdate(
                 id,
-                { $set: new_post },
+                { $set: new_Products },
                 { new: true }
             );
 
-            res.status(200).json(post)
+            res.status(200).json(Products)
         } catch (error) {
             console.log(error);
             res.status(404).json({ message: error.message })
         }
     }
-    static async deletePost(req, res) {
+    static async deleteProducts(req, res) {
         const id = req.params.id;
         try {
-            const result = await Post.findByIdAndDelete(id)
+            const result = await Products.findByIdAndDelete(id)
             if (result.image != '') {
                 try {
                     fs.unlinkSync('./uploads/' + result.image)
@@ -109,13 +109,13 @@ module.exports = class Products {
     }
     static filterItemsByName = asyncHandler(async (req, res) => {
         const query = req.query.q;
-        const filteredData = await Post.find({ name: { $regex: query, $options: 'i' } });
+        const filteredData = await Products.find({ name: { $regex: query, $options: 'i' } });
         res.json(filteredData);
 
     })
     static filterItemsByBarCode = asyncHandler(async (req, res) => {
         const query = Number(req.query.q);
-        const filteredData = await Post.find({ bar_code: query });
+        const filteredData = await Products.find({ bar_code: query });
         res.json(filteredData);
 
     })

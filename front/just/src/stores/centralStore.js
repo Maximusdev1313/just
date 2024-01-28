@@ -3,14 +3,14 @@ import axios from 'axios'
 import { nextTick } from 'vue'
 export const useCentralStore = defineStore('central', {
   state: () => ({
+    api: 'http://localhost:5000/api',
     products: JSON.parse(localStorage.getItem('products')) || [],
     items: [],
     itemsForSell: [],
     cartOpen: false,
     productsFromStorage: JSON.parse(localStorage.getItem('productsForSell')) || [],
     check: [],
-    clients: []
-
+    clients: [],
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -19,13 +19,52 @@ export const useCentralStore = defineStore('central', {
   actions: {
     async getProductsFromServer() {
       try {
-        const products = await axios.get('http://localhost:5000/api/products')
+        const products = await axios.get(`${this.api}/products`)
         this.products = products.data
         localStorage.setItem("products", JSON.stringify(products.data))
       } catch (error) {
         console.log(error);
       }
     },
+    async getReport(specialApi) {
+      try {
+        const products = await axios.get(`${this.api}/${specialApi}`)
+        return products.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async filterByDateRange(startDate, endDate, specialApi) {
+      const report = await this.getReport(specialApi);
+
+      let start = new Date(startDate);
+      start.setHours(0, 0, 0, 0); // set time to the start of the day
+      let end = new Date(endDate);
+      end.setHours(23, 59, 59, 999); // set time to the end of the day
+      let filteredItems = report.filter(el => {
+        let createdDate = new Date(el.created);
+        return createdDate >= start && createdDate <= end;
+      });
+      console.log(start);
+      return filteredItems
+    },
+
+    calculateTotalValueAndProfit(products) {
+      let totalValue = 0;
+      let totalProfit = 0;
+      let totalEntryValue = 0
+      products.forEach(product => {
+        let value = product.price * product.quantity;
+        let profit = (product.price - product.entry_price) * product.quantity;
+        let noFrofit = product.entry_price * product.quantity
+        totalEntryValue += noFrofit
+        totalValue += value;
+        totalProfit += profit;
+      });
+
+      return { totalValue, totalProfit, totalEntryValue }
+    },
+
     increment() {
       this.count++
     },

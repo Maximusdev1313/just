@@ -3,13 +3,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
 
+const smsController = require('./controllers/smsController');
 const app = express()
+
+
+
+
+
+
 const port = process.env.PORT || 5000
 process.env.TZ = "Asia/Tashkent"
 
 app.use(cors({ origin: ['http://localhost:5173'] }))
-// https://script.google.com/macros/s/AKfycbwJHcuy9q9JL6cT3w8BE280nfLcgtVqeIOPxajqFzMcwjf8D-F0nlDwhxqrK3BNnCFc/exec
-// AKfycbwJHcuy9q9JL6cT3w8BE280nfLcgtVqeIOPxajqFzMcwjf8D-F0nlDwhxqrK3BNnCFc
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('uploads'))
@@ -26,7 +32,9 @@ mongoose.connect(process.env.DB_URI, {
 
 //routes
 app.use('/api/products', require('./routes/productRoutes'))
-// app.use('/api/days', require('./routes/reportRoutes'))
+app.use('/api/sold-products', require('./routes/soldProductRoutes'))
+app.use('/api', require('./routes/users/ownerRoutes'))
+app.post('/send-sms', smsController.sendSMS);
 // app.use('/api/orders', require('./routes/orderRoutes'))
 // app.use('/user', require('./routes/userRoutes'))
 //port listening

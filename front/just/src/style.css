@@ -133,7 +133,17 @@ background-color: #2d2d2e;
 .hover:hover{
   background-color: #515153;
 }
+.devider{
+  width: 90%;
+  height: 1px;
+  border-bottom: 2px solid #1d1d1d;
 
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+input{
+  margin-bottom: 1em;
+}
 #app {
   width: 100%;
   height: auto;
