@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
     try {
         const user = new User(req.body);
         await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({ message: 'successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error registering user' });
     }
@@ -24,7 +24,11 @@ const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
     try {
-        const user = await User.findOne({ name: req.body.name });
+        // Get the user from the request body
+        const requested_owner = req.body.owner_name.toLowerCase()
+        console.log(requested_owner);
+        const user = await User.findOne({ owner_name: requested_owner });
+        console.log(user);
         if (!user) {
             return res.status(200).json({ message: 'User topilmadi' });
         }

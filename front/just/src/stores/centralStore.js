@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { nextTick } from 'vue'
+import VueCookies from "vue-cookies";
+
 export const useCentralStore = defineStore('central', {
   state: () => ({
     api: 'http://localhost:5000/api',
@@ -21,12 +23,30 @@ export const useCentralStore = defineStore('central', {
     async getProductsFromServer() {
       try {
         const products = await axios.get(`${this.api}/products`)
-        this.products = products.data
-        localStorage.setItem("products", JSON.stringify(products.data))
+        const user = VueCookies.get('user')
+        if (!user.market_name) {
+          alert('Do\'kon nomida xatolik mavjud')
+          return
+        }
+        console.log(user.market_name);
+        this.products = this.filterProductsByMarketName(products.data, user)
+        // this.products = products.data
+        if (!this.products.length) {
+          alert('Mahsulotlar  topilmadi')
+          return
+        }
+        localStorage.setItem("products", JSON.stringify(this.products))
+        console.log(this.products);
       } catch (error) {
         console.log(error);
       }
     },
+    filterProductsByMarketName(products, currentUser) {
+      console.log(products);
+      return products.filter((products) => products.market_name === currentUser.market_name);
+    },
+
+
     async getReport(specialApi) {
       try {
         const products = await axios.get(`${this.api}/${specialApi}`)

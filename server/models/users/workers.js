@@ -5,7 +5,10 @@ const WorkerSchema = mongoose.Schema({
     phone_number: String,
     password: String,
     money: Number,
-
+    market_name: {
+        type: String,
+        default: ''
+    },
 
     created: {
         type: Date,

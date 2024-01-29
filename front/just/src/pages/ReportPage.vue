@@ -2,9 +2,10 @@
 import { ref, watch } from "vue";
 import { reactive } from "vue";
 import { useCentralStore } from "../stores/centralStore";
+import VueCookies from "vue-cookies";
 import Table from "../components/Table.vue";
 const store = useCentralStore();
-
+const user = VueCookies.get("user");
 const date1 = ref("");
 const date2 = ref("");
 const filteredItems = ref([]);
@@ -46,7 +47,10 @@ watch([() => date1.value, () => date2.value], () => {
         <button @click="calculate" type="button">Hisoblash</button>
       </div>
 
-      <div class="market-info">idno</div>
+      <div class="market-info">
+        {{ user.owner_name }}
+        {{ user.phone_number }}
+      </div>
     </div>
     <div class="devider"></div>
     <div class="info mt-xl">

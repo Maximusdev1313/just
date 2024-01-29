@@ -18,7 +18,7 @@ module.exports = class Products {
     static fetchProductsId = asyncHandler(async (req, res) => {
         const id = req.params.id
         try {
-            const products = await Products.findById(id)
+            const products = await Product.findById(id)
             res.status(200).json(products)
         } catch (error) {
             res.status(404).json({ message: error.message })
@@ -34,7 +34,7 @@ module.exports = class Products {
         }
 
         try {
-            await Products.create(products)
+            await Product.create(products)
             res.status(201).json({ message: 'products created' })
         } catch (error) {
             res.status(400).json({ message: error.message })
@@ -44,7 +44,7 @@ module.exports = class Products {
     static async updateProducts(req, res) {
         const id = req.params.id;
         let new_image = '';
-        const old_products = await Products.findById(id);
+        const old_products = await Product.findById(id);
         if (req.file) {
             // Delete old image file
             // fs.unlink(path.join(__dirname, '../uploads/', old_post.image), err => {
@@ -64,7 +64,7 @@ module.exports = class Products {
         newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity_in_store);
         try {
             console.log(req.body);
-            await Products.findByIdAndUpdate(id, newProducts);
+            await Product.findByIdAndUpdate(id, newProducts);
             res.status(200).json({ message: 'updated successfully' });
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -73,7 +73,7 @@ module.exports = class Products {
     static async decrementProductsQuantity(req, res) {
         const id = req.params.id
         const new_Products = req.body
-        const old_Products = await Products.findById(id)
+        const old_Products = await Product.findById(id)
 
         new_Products.quantity_in_store = (old_Products.quantity_in_store - new_Products.quantity).toFixed(1)
         new_Products.quantity = 0
@@ -93,7 +93,7 @@ module.exports = class Products {
     static async deleteProducts(req, res) {
         const id = req.params.id;
         try {
-            const result = await Products.findByIdAndDelete(id)
+            const result = await Product.findByIdAndDelete(id)
             if (result.image != '') {
                 try {
                     fs.unlinkSync('./uploads/' + result.image)
@@ -109,13 +109,13 @@ module.exports = class Products {
     }
     static filterItemsByName = asyncHandler(async (req, res) => {
         const query = req.query.q;
-        const filteredData = await Products.find({ name: { $regex: query, $options: 'i' } });
+        const filteredData = await Product.find({ name: { $regex: query, $options: 'i' } });
         res.json(filteredData);
 
     })
     static filterItemsByBarCode = asyncHandler(async (req, res) => {
         const query = Number(req.query.q);
-        const filteredData = await Products.find({ bar_code: query });
+        const filteredData = await Product.find({ bar_code: query });
         res.json(filteredData);
 
     })
