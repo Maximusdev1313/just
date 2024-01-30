@@ -25,9 +25,8 @@ const jwt = require('jsonwebtoken');
 exports.login = async (req, res) => {
     try {
         // Get the user from the request body
-        const requested_owner = req.body.owner_name.toLowerCase()
         console.log(requested_owner);
-        const user = await User.findOne({ owner_name: requested_owner });
+        const user = await User.findOne({ owner_name: req.body.owner_name });
         console.log(user);
         if (!user) {
             return res.status(200).json({ message: 'User topilmadi' });
