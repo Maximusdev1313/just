@@ -88,6 +88,9 @@ background-color: #2d2d2e;
 .justify-center{
   justify-content: center;
 }
+.justify-end{
+  justify-content: end;
+}
 .row{
   flex-direction: row;
 }
