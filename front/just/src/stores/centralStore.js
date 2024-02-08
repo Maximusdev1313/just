@@ -19,6 +19,7 @@ export const useCentralStore = defineStore('central', {
     itemForShow: null,
     totalSum: 0,
     notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
+    user: VueCookies.get('user') || null,
 
   }),
   getters: {

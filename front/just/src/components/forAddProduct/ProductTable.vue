@@ -1,114 +1,132 @@
 <script setup>
 import { ref } from "vue";
-import { useCentralStore } from "../../stores/centralStore"
+import { useCentralStore } from "../../stores/centralStore";
 import axios from "axios";
-const store = useCentralStore()
+const store = useCentralStore();
 
-let ChanageProduct = async(item) => {
-    try {
-        console.log(item.name);
-        let data = await axios.patch(store.api+"/products/"+item._id+"/",{
-            name: item.name,
-            size: item.size,
-            entry_price: item.entry_price,
-            price: item.price,
-            quantity_in_store: item.quantity_in_store,
-            quantity: item.quantity,
-            description: item.description,
-            discount_price: item.discount_price,
-            minimal_quantity: item.minimal_quantity,
-            status: item.status,     
-        })
-        console.log(data);
-    } catch (error) {
-        console.log(error);
-    }
-    // `${store.api}/products/${item._id}`
-}
-
+let ChanageProduct = async (item) => {
+  try {
+    console.log(item.name);
+    let data = await axios.patch(store.api + "/products/" + item._id + "/", {
+      name: item.name,
+      size: item.size,
+      entry_price: item.entry_price,
+      price: item.price,
+      quantity_in_store: item.quantity_in_store,
+      quantity: item.quantity,
+      description: item.description,
+      discount_price: item.discount_price,
+      minimal_quantity: item.minimal_quantity,
+      status: item.status,
+    });
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+  // `${store.api}/products/${item._id}`
+  store.getProductsFromServer();
+};
 </script>
 
 <template>
-    <div class=" w-100 flex justify-center content " >
-        <table>
-            <tr>
-                <th class=" w-3 " > Tr </th>
-                <th class=" w-15 " > Nomi </th>
-                <th class=" w-8 " > Maxsulot Turi </th>
-                <th class=" w-7 " > Kelish Narxi </th>
-                <th class=" w-8 " > Sotish Narxi </th>
-                <th class=" w-8 " > Qolgan Maxsulot </th>
-                <th class=" w-7 "> Soni </th>
-                <th class=" w-11 " > Tasnifi </th>
-                <th class=" w-8 " > Chegirma Narxi </th>
-                <th class=" w-7 " > Minimal Miqrori </th>
-                <th class=" w-11 " > Status </th>
-                <th class=" w-9 " > Taxrirlash </th>
-            </tr>
+  <div class="w-100 flex justify-center content">
+    <table>
+      <tr>
+        <th class="w-3">Tr</th>
+        <th class="w-15">Nomi</th>
+        <th class="w-8">Maxsulot Turi</th>
+        <th class="w-7">Kelish Narxi</th>
+        <th class="w-8">Sotish Narxi</th>
+        <th class="w-8">Qolgan Maxsulot</th>
+        <th class="w-7">Soni</th>
+        <th class="w-11">Tasnifi</th>
+        <th class="w-8">Chegirma Narxi</th>
+        <th class="w-7">Minimal Miqrori</th>
+        <th class="w-11">Status</th>
+        <th class="w-9">Taxrirlash</th>
+      </tr>
 
-            <tr v-for=" item , i in store.items " :key="i"  >
-                <td> {{ i+1 }} </td>
-                <td> 
-                    <textarea v-model="item.name"  rows="3" />
-                </td>
-                <td> 
-                    <div class="flex">
-                        <input class="inp__radio" type="radio" v-model="item.size"  value="kg" > 
-                        <label > kg </label>
-                        <input class="inp__radio" type="radio" v-model="item.size"  value="ta" > 
-                        <label > ta </label>       
-                    </div>
-                </td>
-                <td> 
-                    <input v-model="item.entry_price" type="number"/> 
-                </td>
-                <td> 
-                    <input v-model="item.price" type="number" > 
-                </td>
-                <td> 
-                    <input v-model="item.salesman" type="text" />
-                </td>
-                <td> 
-                    <input v-model="item.quantity" type="number" >  
-                </td>
-                <td> 
-                    <textarea v-model="item.description"  rows="3" />  
-                </td>
-                <td> 
-                    <input v-model="item.discount_price" type="number" />
-                </td>
-                <td> 
-                    <input v-model="item.minimal_quantity" type="number" />
-                </td>
-                <td>
-                    <textarea v-model="item.status" rows="3" />
-                </td>
-               
-                <td> <button @click="ChanageProduct(item)" > Taxrirlash </button> </td>
-            </tr>
-        </table>
+      <tr v-for="(item, i) in store.items" :key="i">
+        <td>{{ i + 1 }}</td>
+        <td>
+          <textarea v-model="item.name" rows="3" />
+        </td>
+        <td>
+          <div class="flex">
+            <input
+              class="inp__radio"
+              type="radio"
+              v-model="item.size"
+              value="kg"
+            />
+            <label> kg </label>
+            <input
+              class="inp__radio"
+              type="radio"
+              v-model="item.size"
+              value="ta"
+            />
+            <label> ta </label>
+          </div>
+        </td>
+        <td>
+          <input v-model="item.entry_price" type="number" />
+        </td>
+        <td>
+          <input v-model="item.price" type="number" />
+        </td>
+        <td>
+          <input v-model="item.quantity_in_store" type="text" />
+        </td>
+        <td>
+          <input v-model="item.quantity" type="number" />
+        </td>
+        <td>
+          <textarea v-model="item.description" rows="3" />
+        </td>
+        <td>
+          <input v-model="item.discount_price" type="number" />
+        </td>
+        <td>
+          <input v-model="item.minimal_quantity" type="number" />
+        </td>
+        <td>
+          <textarea v-model="item.status" rows="3" />
+        </td>
 
-        
-    </div>
+        <td><button @click="ChanageProduct(item)">Taxrirlash</button></td>
+      </tr>
+    </table>
+  </div>
 </template>
 
-
-
 <style scoped>
-input{
-    padding: 5px 2px 5px 2px ;
-    font-size: 16px;
-    border: none;
-    text-align: center;
-    background: none;
-    margin-top: 14%;
+input {
+  padding: 15px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: montserrat;
+  font-size: 18px;
 }
-textarea{
-    width: 96%;
-    padding:2%;
-    border: none;
-    font-size:15px ;
-    background: none;
+::placeholder {
+  font-size: 20px;
+}
+input {
+  padding: 5px 2px 5px 2px;
+  font-size: 16px;
+  border: none;
+  text-align: center;
+  background: none;
+  margin-top: 14%;
+}
+textarea {
+  width: 96%;
+  padding: 2%;
+  border: none;
+  font-size: 15px;
+  background: none;
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -120,46 +138,46 @@ textarea{
   border-radius: 2px;
   background: rgb(182, 180, 180);
 }
-.inp__radio{
-    margin: 0px 3px 0px 0px ;
+.inp__radio {
+  margin: 0px 3px 0px 0px;
 }
-label{
-    margin-right: 3px;
+label {
+  margin-right: 3px;
 }
-.content{
-    margin-top: 50px;
+.content {
+  margin-top: 50px;
 }
-table{
-    width: 95%;
+table {
+  width: 95%;
 }
-td{
-    text-align: center;
-    align-items: center;
+td {
+  text-align: center;
+  align-items: center;
 }
-button{
-    margin: 5px;
-    background: rgb(198, 96, 232);
-    color: white;
+button {
+  margin: 5px;
+  background: rgb(198, 96, 232);
+  color: white;
 }
-.w-15{
-    width: 15%;
+.w-15 {
+  width: 15%;
 }
-.w-3{
-    width: 3%;
+.w-3 {
+  width: 3%;
 }
-.w-7{
-    width: 7%;
+.w-7 {
+  width: 7%;
 }
-.w-8{
-    width: 8%;
+.w-8 {
+  width: 8%;
 }
-.w-9{
-    width: 9%;
+.w-9 {
+  width: 9%;
 }
-.w-11{
-    width: 11%;
+.w-11 {
+  width: 11%;
 }
-tr:nth-child(odd){
-    background: rgb(236, 239, 249);
-}
+/* tr:nth-child(odd) {
+  background: rgb(236, 239, 249);
+} */
 </style>
