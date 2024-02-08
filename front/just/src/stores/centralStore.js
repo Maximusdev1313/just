@@ -5,7 +5,7 @@ import VueCookies from "vue-cookies";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'http://localhost:5000/api',
+    api: 'https://justserver-x2jf.onrender.com/api',
     products: JSON.parse(localStorage.getItem('products')) || [],
     items: [],
     itemsForSell: [],
