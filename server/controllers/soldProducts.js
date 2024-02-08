@@ -37,8 +37,8 @@ module.exports = class Products {
 
 
         try {
-            await soldProducts.create(product)
-            res.status(201).json({ message: 'product created' })
+            await soldProduct.create(product)
+            res.status(201).json({ message: `${product.name}` })
         } catch (error) {
             res.status(400).json({ message: error.message })
         }

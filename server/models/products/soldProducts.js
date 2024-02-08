@@ -38,7 +38,7 @@ const soldProductSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    fillial: {
+    market_name: {
         type: String,
         default: 'Avval1'
     },

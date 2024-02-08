@@ -1,7 +1,7 @@
-const User = require('../../models/users/owner');
+const User = require('../../models/users/user');
 const bcrypt = require('bcrypt');
 
-exports.getOwner = async (req, res) => {
+exports.getUser = async (req, res) => {
     try {
         const user = await User.find()
         res.status(200).json(user);
@@ -25,12 +25,13 @@ const jwt = require('jsonwebtoken');
 exports.login = async (req, res) => {
     try {
         // Get the user from the request body
-        console.log(requested_owner);
-        const user = await User.findOne({ owner_name: req.body.owner_name });
+        console.log(req.body);
+        const user = await User.findOne({ name: req.body.name });
         console.log(user);
         if (!user) {
             return res.status(200).json({ message: 'User topilmadi' });
         }
+        console.log(req.body);
 
         const isMatch = await bcrypt.compare(req.body.password, user.password);
         if (!isMatch) {
@@ -45,9 +46,10 @@ exports.login = async (req, res) => {
 
         res.status(200).json({
             id: user._id,
-            owner_name: user.owner_name,
+            name: user.name,
             phone_number: user.phone_number,
             market_name: user.market_name,
+            role: user.role,
             money: user.money,
             is_active: user.is_active,
             last_activation: user.last_activation,

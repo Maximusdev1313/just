@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
-const WorkerSchema = require('./workers')
+
 const bcrypt = require('bcrypt');
 
-const OwnerSchema = new mongoose.Schema({
-    owner_name: {
+const UserSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true
     },
     password: {
         type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ['owner', 'worker'],
         required: true
     },
     phone_number: {
@@ -19,6 +24,7 @@ const OwnerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    role: String,
 
     money: {
         type: Number,
@@ -36,14 +42,14 @@ const OwnerSchema = new mongoose.Schema({
         default: ''
     },
 
-    workers: [WorkerSchema],
+
 });
 
-OwnerSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 10);
     }
     next();
 });
 
-module.exports = mongoose.model('Owner', OwnerSchema);
+module.exports = mongoose.model('User', UserSchema);

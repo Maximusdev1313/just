@@ -15,7 +15,7 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #b6b9f3;
   text-decoration: inherit;
 }
 a:hover {
@@ -145,6 +145,13 @@ background-color: #2d2d2e;
 input{
   margin-bottom: 1em;
 }
+.title{
+  font-size: 1.5em;
+  margin-top: 0.2em;
+  margin-bottom: 0.3em;
+  text-align: center;
+
+}
 #app {
   width: 100%;
   height: auto;
@@ -187,4 +194,28 @@ input{
     background-color: #5a5a5c;
   }
 
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  /* Add your CSS here */
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  /* Add your CSS here */
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  /* Add your CSS here */
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  /* Add your CSS here */
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* Add your CSS here */
 }
