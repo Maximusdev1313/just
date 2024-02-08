@@ -33,7 +33,8 @@ mongoose.connect(process.env.DB_URI, {
 //routes
 app.use('/api/products', require('./routes/productRoutes'))
 app.use('/api/sold-products', require('./routes/soldProductRoutes'))
-app.use('/api', require('./routes/users/ownerRoutes'))
+app.use('/api', require('./routes/users/userRoutes'))
+
 app.post('/send-sms', smsController.sendSMS);
 // app.use('/api/orders', require('./routes/orderRoutes'))
 // app.use('/user', require('./routes/userRoutes'))

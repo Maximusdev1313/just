@@ -1,6 +1,6 @@
 <script setup>
 import { useCentralStore } from "../stores/centralStore";
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 
 const store = useCentralStore();
 let inputRef = ref([]);
@@ -12,6 +12,11 @@ const focusInput = async () => {
     }
   });
 };
+store.totalSum = computed(() => {
+  return store.itemsForSell.reduce((total, product) => {
+    return total + product.price * product.quantity;
+  }, 0);
+});
 onMounted(() => {
   document.addEventListener("keypress", function (event) {
     console.log(event.key);
