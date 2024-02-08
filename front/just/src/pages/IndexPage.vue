@@ -14,10 +14,11 @@ const postSoldProducts = async () => {
   if (store.productsFromStorage.length) {
     for (let product of store.productsFromStorage) {
       await store.postProducts(product, "sold-products");
+      await store.decrementQuantityFromStore(product);
     }
     store.itemForShow = null;
     localStorage.removeItem("productsForSell");
-    location.reload();
+    // location.reload();
   }
 };
 </script>
@@ -28,12 +29,13 @@ const postSoldProducts = async () => {
         <a @click="store.getProductsFromServer()">Mahsulot olish</a>
         <a href="/report">Hisobot</a>
         <a href="/auth">Chiqish</a>
+
         <a @click="postSoldProducts" v-if="!store.itemForShow">Hisobot olish</a>
-        <div class="item" v-else>{{ store.itemForShow }}</div>
+        <span class="item">{{ store.itemForShow }}</span>
         <a href="/notAdded" v-if="store.notAdded.length">
           <div class="counter">{{ store.notAdded.length }}</div>
         </a>
-        <div class="">Umumiy: {{ store.totalSum }}</div>
+        <div class="total">Umumiy: {{ store.totalSum }}</div>
         <loader v-if="store.loading" />
       </div>
     </div>
@@ -73,6 +75,9 @@ const postSoldProducts = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.total {
+  width: 150px;
 }
 .checks {
   width: auto;
