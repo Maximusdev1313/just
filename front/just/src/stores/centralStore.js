@@ -17,7 +17,9 @@ export const useCentralStore = defineStore('central', {
     loading: false,
     notAdded: JSON.parse(localStorage.getItem('notAdded')) || [],
     itemForShow: null,
-    totalSum: 0
+    totalSum: 0,
+    notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
+    user: VueCookies.get('user') || null,
 
   }),
   getters: {
@@ -114,6 +116,25 @@ export const useCentralStore = defineStore('central', {
 
           // Log the error
           console.log(error)
+        }
+      }
+    },
+    async decrementQuantityFromStore(products) {
+      for (let product of products) {
+        console.log(product);
+        try {
+          const response = await axios.patch(
+            this.api + '/products/decrement/' + product._id,
+            {
+              _id: product._id,
+              quantity: product.quantity,
+            }
+          );
+          console.log(response.data, 'quantity');
+        } catch (error) {
+          this.notPatched.push(product)
+          this.setItemToStorage('notPatched', this.notPatched)
+
         }
       }
     },

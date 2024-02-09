@@ -74,15 +74,17 @@ module.exports = class Products {
         const id = req.params.id
         const new_Products = req.body
         const old_Products = await Product.findById(id)
-
+        console.log(new_Products.quantity);
+        console.log(old_Products, 'old');
         new_Products.quantity_in_store = (old_Products.quantity_in_store - new_Products.quantity).toFixed(1)
         new_Products.quantity = 0
         try {
-            let Products = await Products.findByIdAndUpdate(
+            let Products = await Product.findByIdAndUpdate(
                 id,
                 { $set: new_Products },
                 { new: true }
             );
+
 
             res.status(200).json(Products)
         } catch (error) {

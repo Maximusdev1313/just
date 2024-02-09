@@ -14,7 +14,7 @@ const app = express()
 const port = process.env.PORT || 5000
 process.env.TZ = "Asia/Tashkent"
 
-app.use(cors({ origin: ['http://localhost:5173'] }))
+app.use(cors({ origin: ['http://localhost:5173', 'https://justuz.netlify.app'] }))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
