@@ -66,7 +66,7 @@ let ChanageProduct = async(item) => {
                     <input v-model="item.price" type="number" > 
                 </td>
                 <td> 
-                    <input v-model="item.salesman" type="text" />
+                    <input v-model="item.quantity_in_store" type="text" />
                 </td>
                 <td> 
                     <input v-model="item.quantity" type="number" >  
