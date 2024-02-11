@@ -1,4 +1,6 @@
 <script setup>
+import { useCentralStore } from "../../stores/centralStore";
+const store = useCentralStore();
 const emit = defineEmits(["ChangeName"]);
 let ChangeName = (newName) => {
   emit("ChangeName", newName);
@@ -8,6 +10,7 @@ let ChangeName = (newName) => {
 <template>
   <div class="w-100 flex justify-center">
     <div class="content flex between">
+      <button @click="store.getProductsFromServer">Mahsulotlarni olish</button>
       <button @click="ChangeName('add')">Maxshulot qo'shish</button>
       <button @click="ChangeName('change')">Maxshulotni taxrirlash</button>
       <button @click="ChangeName('exel')">Exel orqali</button>

@@ -61,7 +61,8 @@ module.exports = class Products {
         }
         const newProducts = req.body;
         newProducts.image = new_image;
-        newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity_in_store);
+        newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity);
+        newProducts.quantity = 0
         try {
             console.log(req.body);
             await Product.findByIdAndUpdate(id, newProducts);

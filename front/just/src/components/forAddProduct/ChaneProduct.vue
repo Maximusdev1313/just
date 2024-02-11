@@ -6,10 +6,6 @@ const store = useCentralStore();
 
 let name = ref();
 let bar_code = ref();
-
-let Search = () => {
-  store.filterProductsByName(name.value);
-};
 </script>
 
 <template>
@@ -18,9 +14,16 @@ let Search = () => {
       <h3>Maxsulot Ma'lumotlarini taxrirlash</h3>
     </div>
     <div class="w-100 form flex justify-center wrap">
-      <input v-model="name" placeholder="Nomi" />
-      <input v-model="bar_code" placeholder="Bar Kodi" />
-      <button @click="Search()">Qidirish</button>
+      <input
+        v-model="name"
+        placeholder="Nomi"
+        @keypress.enter="store.filterProductsByName(name)"
+      />
+      <input
+        v-model="bar_code"
+        placeholder="Bar Kodi"
+        @keypress.enter="store.filterProductsByCode(bar_code)"
+      />
     </div>
 
     <ProductTable />
