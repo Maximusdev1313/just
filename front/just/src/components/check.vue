@@ -113,7 +113,7 @@ const formatHours = (dateString) => {
 .list {
   border: 1px solid #000000;
   padding: 10px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: bold;
 }
 .item {
@@ -125,7 +125,7 @@ const formatHours = (dateString) => {
 .item-counts {
   width: 60%;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
