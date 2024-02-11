@@ -25,31 +25,18 @@ const printElement = (elementId) => {
   ]) {
     stylesHtml += node.outerHTML;
   }
+  const originalContent = document.body.innerHTML;
 
-  // Open the print window
-  const WinPrint = window.open(
-    "",
-    "",
-    "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0"
-  );
-  WinPrint.document.write(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        ${stylesHtml}
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-  WinPrint.document.close();
-  WinPrint.focus();
-  WinPrint.print();
-  WinPrint.onafterprint = () => {
-    window.location.reload(); // Reload the page after printing
-  };
-  WinPrint.close();
+  // Include the styles in the print content
+  document.body.innerHTML = stylesHtml + printContent;
+
+  window.print();
+
+  document.body.innerHTML = originalContent;
+
+  // You may want to comment out the next two lines if you don't want to reload and close the window after printing
+  window.location.reload(); // Reload the page after printing
+  // window.close();
 };
 
 const formatHours = (dateString) => {
@@ -88,7 +75,7 @@ const formatHours = (dateString) => {
             </div>
           </div>
           <div class="total flex justify-around mt-md">
-            <span>Umumiy:</span>
+            <span>Umumiy: so'm</span>
           </div>
         </div>
 

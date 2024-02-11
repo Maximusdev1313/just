@@ -5,6 +5,7 @@ const store = useCentralStore();
 
 const name = ref("");
 let inputRef = ref(null);
+const code = ref("");
 const focusInput = async () => {
   if (inputRef.value) {
     await nextTick();
@@ -45,6 +46,8 @@ onUnmounted(() => {
         label="ismingiz"
         placeholder="Bar code"
         class="mt-md"
+        v-model="code"
+        @keypress.enter="store.filterProductsByCode(code)"
       />
       <button
         type="submit"

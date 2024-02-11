@@ -214,10 +214,16 @@ export const useCentralStore = defineStore('central', {
 
       this.cartOpen = true
     },
-    // filterProductsByCode(code) {
-    //   this.items = this.products.filter(item => item.bar_code.toLowerCase().includes(code.toLowerCase()));
-    //   console.log(this.items);
-    // },
+    filterProductsByCode(code) {
+      this.items = this.products.filter(item => item.bar_code == code);
+      if (this.items.length > 1) {
+        this.cartOpen = true
+      }
+      else {
+        this.addToCart(this.items[0])
+      }
+      console.log(this.items);
+    },
     addToCart(product) {
       // Check if the product is not already in the itemsForSell array
       if (!this.itemsForSell.some(i => i === product)) {
