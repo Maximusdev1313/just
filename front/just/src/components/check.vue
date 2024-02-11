@@ -17,7 +17,7 @@ const props = defineProps({
 const { orders, index } = toRefs(props);
 
 const grandToTalSum = computed(() => {
-  return orders.value.reduce((sum, item) => sum + item.totalSum, 0);
+  return orders.value.reduce((sum, item) => sum + item?.totalSum, 0);
 });
 
 const printElement = (elementId) => {
