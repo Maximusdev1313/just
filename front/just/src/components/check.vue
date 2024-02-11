@@ -46,8 +46,12 @@ const printElement = (elementId) => {
   WinPrint.document.close();
   WinPrint.focus();
   WinPrint.print();
+  WinPrint.onafterprint = () => {
+    window.location.reload(); // Reload the page after printing
+  };
   WinPrint.close();
 };
+
 const formatHours = (dateString) => {
   const date = new Date(dateString);
   return format(date, "MM-dd/HH:mm");
