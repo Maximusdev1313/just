@@ -326,7 +326,10 @@ export const useCentralStore = defineStore('central', {
 
         // Get the items for sell from local storage, if any
         item = JSON.parse(localStorage.getItem('productsForSell')) || []
-
+        // Add the total sum to each item
+        this.itemsForSell.forEach(product => {
+          product.totalSum = product.price * product.quantity;
+        });
         // Add the current items for sell to the beginning of the items array
         item.unshift(this.itemsForSell)
 

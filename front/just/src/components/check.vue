@@ -1,5 +1,5 @@
 <script setup>
-import { toRefs, watch } from "vue";
+import { computed, toRefs, watch } from "vue";
 import { useCentralStore } from "../stores/centralStore";
 import { format } from "date-fns";
 
@@ -15,6 +15,10 @@ const props = defineProps({
   },
 });
 const { orders, index } = toRefs(props);
+
+const grandToTalSum = computed(() => {
+  return orders.value.reduce((sum, item) => sum + item.totalSum, 0);
+});
 
 const printElement = (elementId) => {
   const printContent = document.getElementById(elementId).innerHTML;
@@ -75,7 +79,7 @@ const formatHours = (dateString) => {
             </div>
           </div>
           <div class="total flex justify-around mt-md">
-            <span>Umumiy: so'm</span>
+            <span>Umumiy: {{ grandToTalSum }} so'm</span>
           </div>
         </div>
 
