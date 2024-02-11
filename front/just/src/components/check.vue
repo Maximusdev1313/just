@@ -87,7 +87,7 @@ const formatHours = (dateString) => {
               </div>
             </div>
           </div>
-          <div class="total flex justify-around text-bold q-pt-sm">
+          <div class="total flex justify-around mt-md">
             <span>Umumiy:</span>
           </div>
         </div>
@@ -143,5 +143,8 @@ const formatHours = (dateString) => {
 }
 button {
   width: 200px;
+}
+.total {
+  margin-top: 25px;
 }
 </style>
