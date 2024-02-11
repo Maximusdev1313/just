@@ -111,9 +111,10 @@ const formatHours = (dateString) => {
   text-align: center;
 }
 .list {
-  border: 1px solid #565657;
+  border: 1px solid #000000;
   padding: 10px;
-  font-size: 9px;
+  font-size: 10px;
+  font-weight: bold;
 }
 .item {
   border-bottom: 1px dotted #000;
