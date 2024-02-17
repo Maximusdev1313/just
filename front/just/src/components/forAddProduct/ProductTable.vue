@@ -5,6 +5,7 @@ import axios from "axios";
 import loader from "../../components/loader.vue";
 const store = useCentralStore();
 const isLoad = ref(false);
+
 let ChanageProduct = async (item) => {
   isLoad.value = true;
   try {
@@ -14,8 +15,8 @@ let ChanageProduct = async (item) => {
       size: item.size,
       entry_price: item.entry_price,
       price: item.price,
-      quantity_in_store: item.quantity_in_store,
       quantity: item.quantity,
+      quantity_in_store: item.quantity_in_store,
       description: item.description,
       discount_price: item.discount_price,
       minimal_quantity: item.minimal_quantity,
@@ -23,12 +24,14 @@ let ChanageProduct = async (item) => {
     });
     console.log(data);
     isLoad.value = false;
-    item.quantity = 0;
+    localStorage.removeItem("products");
+    store.items = [];
   } catch (error) {
     alert("Xatolik");
     console.log(error);
   }
   // `${store.api}/products/${item._id}`
+
   store.getProductsFromServer();
 };
 </script>

@@ -41,7 +41,7 @@ watch([() => date1.value, () => date2.value], () => {
     <div class="flex between date item-center mt-md">
       <div class="flex col">
         <router-link to="/addproduct">
-          <button>Mahdulot qo'shish</button>
+          <button>Mahsulot qo'shish</button>
         </router-link>
         <label for="fdate">Birinchi sana:</label>
         <input type="date" name="fdate" id="" title="date1" v-model="date1" />
