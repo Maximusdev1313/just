@@ -150,7 +150,8 @@ export const useCentralStore = defineStore('central', {
     async filterByDateRange(startDate, endDate, specialApi) {
       // Fetch the report from the server using the special API
       const report = await this.getReport(specialApi);
-
+      console.log(report);
+      const items = this.filterProductsByMarketName(report, this.user)
       // Create a new Date object for the start date and set the time to the start of the day
       let start = new Date(startDate);
       start.setHours(0, 0, 0, 0);
@@ -160,7 +161,7 @@ export const useCentralStore = defineStore('central', {
       end.setHours(23, 59, 59, 999);
 
       // Filter the items in the report based on the created date
-      let filteredItems = report.filter(el => {
+      let filteredItems = items.filter(el => {
         // Create a new Date object for the created date of the item
         let createdDate = new Date(el.created);
 
@@ -214,10 +215,16 @@ export const useCentralStore = defineStore('central', {
 
       this.cartOpen = true
     },
-    // filterProductsByCode(code) {
-    //   this.items = this.products.filter(item => item.bar_code.toLowerCase().includes(code.toLowerCase()));
-    //   console.log(this.items);
-    // },
+    filterProductsByCode(code) {
+      this.items = this.products.filter(item => item.bar_code == code);
+      if (this.items.length > 1) {
+        this.cartOpen = true
+      }
+      else {
+        this.addToCart(this.items[0])
+      }
+      console.log(this.items);
+    },
     addToCart(product) {
       // Check if the product is not already in the itemsForSell array
       if (!this.itemsForSell.some(i => i === product)) {
@@ -320,7 +327,10 @@ export const useCentralStore = defineStore('central', {
 
         // Get the items for sell from local storage, if any
         item = JSON.parse(localStorage.getItem('productsForSell')) || []
-
+        // Add the total sum to each item
+        this.itemsForSell.forEach(product => {
+          product.totalSum = product.price * product.quantity;
+        });
         // Add the current items for sell to the beginning of the items array
         item.unshift(this.itemsForSell)
 
@@ -406,6 +416,24 @@ export const useCentralStore = defineStore('central', {
       this.clients.splice(index, 1)
       localStorage.setItem('clients', JSON.stringify(this.clients));
       this.itemsForSell = []
+    },
+    async postEntryProducts(product) {
+      try {
+        const response = await axios.post(this.api + '/entry-products', {
+          name: product.name,
+          quantity: product.quantity_in_store,
+          price: product.price,
+          entry_price: product.entry_price,
+          bar_code: product.bar_code,
+          salesman: this.user.name,
+          size: product.size,
+          market_name: this.user.market_name,
+          created: product.created
+        })
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 })

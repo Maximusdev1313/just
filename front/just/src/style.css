@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #fff;
   background-color: #242424;
 
   font-synthesis: none;
@@ -25,7 +25,7 @@ a:hover {
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 90vh;
   box-sizing: border-box;
 }
 
@@ -63,8 +63,9 @@ border-radius: 8px;
 background-color: #2d2d2e;
 }
 .list{
-  background-color: #2d2d2e;
+  background-color: #000000;
   border-radius: 15px;
+
 }
 .disable {
   background-color: #585757;
@@ -165,7 +166,7 @@ input{
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #000000;
     background-color: #ffffff;
   }
   a:hover {
@@ -185,7 +186,8 @@ input{
     background-color: #f9f9f9;
   }
   .list{
-    background-color: #f9f9f9;
+    background-color: #ffffff;
+  
     -webkit-box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);
     -moz-box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);
     box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);

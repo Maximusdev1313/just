@@ -34,12 +34,18 @@ module.exports = class Products {
         }
 
         try {
-            await Product.create(products)
-            res.status(201).json({ message: 'products created' })
+            if (await Product.exists({ name: products.name, market_name: products.market_name })) {
+                return res.status(400).json({ message: "Product with the same name and market name already exists" });
+            }
+
+            const createdProduct = await Product.create(products)
+            res.status(201).json(createdProduct)
         } catch (error) {
-            res.status(400).json({ message: error.message })
+            console.log(error);
+            res.status(500).json({ message: 'Internal Server Error' });
         }
     })
+
 
     static async updateProducts(req, res) {
         const id = req.params.id;
@@ -61,7 +67,9 @@ module.exports = class Products {
         }
         const newProducts = req.body;
         newProducts.image = new_image;
-        newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity_in_store);
+        newProducts.quantity_in_store = old_products.quantity_in_store + Number(newProducts.quantity);
+        newProducts.quantity = 0
+        console.log(newProducts.quantity, 'quan');
         try {
             console.log(req.body);
             await Product.findByIdAndUpdate(id, newProducts);

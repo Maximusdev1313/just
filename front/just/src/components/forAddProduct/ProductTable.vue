@@ -2,28 +2,36 @@
 import { ref } from "vue";
 import { useCentralStore } from "../../stores/centralStore";
 import axios from "axios";
+import loader from "../../components/loader.vue";
 const store = useCentralStore();
+const isLoad = ref(false);
 
 let ChanageProduct = async (item) => {
+  isLoad.value = true;
   try {
     console.log(item.name);
-    let data = await axios.patch(store.api + "/products/" + item._id + "/", {
+    let data = await axios.patch(store.api + "/products/" + item._id, {
       name: item.name,
       size: item.size,
       entry_price: item.entry_price,
       price: item.price,
-      quantity_in_store: item.quantity_in_store,
       quantity: item.quantity,
+      quantity_in_store: item.quantity_in_store,
       description: item.description,
       discount_price: item.discount_price,
       minimal_quantity: item.minimal_quantity,
       status: item.status,
     });
     console.log(data);
+    isLoad.value = false;
+    localStorage.removeItem("products");
+    store.items = [];
   } catch (error) {
+    alert("Xatolik");
     console.log(error);
   }
   // `${store.api}/products/${item._id}`
+
   store.getProductsFromServer();
 };
 </script>
@@ -76,7 +84,7 @@ let ChanageProduct = async (item) => {
           <input v-model="item.price" type="number" />
         </td>
         <td>
-          <input v-model="item.quantity_in_store" type="text" />
+          {{ item.quantity_in_store }}
         </td>
         <td>
           <input v-model="item.quantity" type="number" />
@@ -93,8 +101,12 @@ let ChanageProduct = async (item) => {
         <td>
           <textarea v-model="item.status" rows="3" />
         </td>
-
-        <td><button @click="ChanageProduct(item)">Taxrirlash</button></td>
+        <td>
+          <button @click="ChanageProduct(item)" v-if="!isLoad">
+            Taxrirlash
+          </button>
+          <loader v-else />
+        </td>
       </tr>
     </table>
   </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { toRefs, watch } from "vue";
+import { computed, toRefs, watch } from "vue";
 import { useCentralStore } from "../stores/centralStore";
 import { format } from "date-fns";
 
@@ -16,6 +16,10 @@ const props = defineProps({
 });
 const { orders, index } = toRefs(props);
 
+const grandToTalSum = computed(() => {
+  return orders.value.reduce((sum, item) => sum + item?.totalSum, 0);
+});
+
 const printElement = (elementId) => {
   const printContent = document.getElementById(elementId).innerHTML;
   // Get all stylesheets HTML
@@ -25,29 +29,20 @@ const printElement = (elementId) => {
   ]) {
     stylesHtml += node.outerHTML;
   }
+  const originalContent = document.body.innerHTML;
 
-  // Open the print window
-  const WinPrint = window.open(
-    "",
-    "",
-    "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0"
-  );
-  WinPrint.document.write(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        ${stylesHtml}
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-  WinPrint.document.close();
-  WinPrint.focus();
-  WinPrint.print();
-  WinPrint.close();
+  // Include the styles in the print content
+  document.body.innerHTML = stylesHtml + printContent;
+
+  window.print();
+
+  document.body.innerHTML = originalContent;
+
+  // You may want to comment out the next two lines if you don't want to reload and close the window after printing
+  window.location.reload(); // Reload the page after printing
+  // window.close();
 };
+
 const formatHours = (dateString) => {
   const date = new Date(dateString);
   return format(date, "MM-dd/HH:mm");
@@ -83,8 +78,8 @@ const formatHours = (dateString) => {
               </div>
             </div>
           </div>
-          <div class="total flex justify-around text-bold q-pt-sm">
-            <span>Umumiy:</span>
+          <div class="total flex justify-around mt-md">
+            <span>Umumiy: {{ grandToTalSum }} so'm</span>
           </div>
         </div>
 
@@ -116,9 +111,10 @@ const formatHours = (dateString) => {
   text-align: center;
 }
 .list {
-  border: 1px solid #565657;
+  border: 1px solid #000000;
   padding: 10px;
-  font-size: 9px;
+  font-size: 14px;
+  font-weight: bold;
 }
 .item {
   border-bottom: 1px dotted #000;
@@ -129,7 +125,7 @@ const formatHours = (dateString) => {
 .item-counts {
   width: 60%;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
@@ -139,5 +135,8 @@ const formatHours = (dateString) => {
 }
 button {
   width: 200px;
+}
+.total {
+  margin-top: 25px;
 }
 </style>

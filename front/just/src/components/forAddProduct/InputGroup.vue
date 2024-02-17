@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useCentralStore } from "../../stores/centralStore";
 const store = useCentralStore();
 let name = ref();
@@ -18,28 +18,35 @@ let categorys = ref([
   { name: " Ichimliklar " },
   { name: " Qadoqlangan maxsulotlar " },
 ]);
-let PostProduct = async (api) => {
+let productDetails = computed(() => ({
+  name: name.value,
+  category: category.value,
+  market_name: store.user.market_name,
+  entry_price: entry_price.value,
+  bar_code: bar_code.value,
+  price: price.value,
+  quantity_in_store: quantity_in_store.value,
+  size: size.value,
+}));
+let PostProduct = async (api, product) => {
   try {
-    let a = await axios.post(store.api + api, {
-      name: name.value,
-      category: category.value,
-      market_name: store.user.market_name,
-      entry_price: entry_price.value,
-      bar_code: bar_code.value,
-      price: price.value,
-      quantity_in_store: quantity_in_store.value,
-      size: size.value,
-    });
-
-    bar_code.value = "";
+    let a = await axios.post(store.api + api, product);
+    product.bar_code = "";
     console.log(a.data);
   } catch (error) {
-    console.log(error);
+    alert(error.response.data.message);
   }
 };
-let Post = async () => {
-  PostProduct("/products");
-  // PostProduct('/sold-products')
+
+let Post = async (product) => {
+  if (product.bar_code == "") {
+    alert("Barcod kodi bo'sh qoldi");
+    return;
+  } else {
+    console.log(productDetails.value);
+    PostProduct("/products", product);
+    store.postEntryProducts(product);
+  }
 };
 </script>
 
@@ -48,6 +55,7 @@ let Post = async () => {
     <div class="w-100 text-center">
       <h3>Maxsulot qo'shish</h3>
     </div>
+
     <div class="form flex justify-center wrap">
       <input v-model="name" placeholder="Maxsulot Nomi" />
       <input v-model="bar_code" placeholder="Bar Kodi" />
@@ -85,7 +93,7 @@ let Post = async () => {
       </div>
       <input v-model="quantity_in_store" placeholder="Miqdori" />
       <div class="w-100 flex justify-end">
-        <button @click="Post()">Qo'shish</button>
+        <button @click="Post(productDetails)">Qo'shish</button>
       </div>
     </div>
   </div>
