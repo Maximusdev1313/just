@@ -8,7 +8,10 @@ import productsList from "../components/productsList.vue";
 import check from "../components/check.vue";
 import clients from "../components/clients.vue";
 import loader from "../components/loader.vue";
+import axios from "axios";
 const store = useCentralStore();
+
+let currency = ref()
 
 const postSoldProducts = async () => {
   if (store.productsFromStorage.length) {
@@ -21,6 +24,11 @@ const postSoldProducts = async () => {
     // location.reload();
   }
 };
+let GetCurrency = async () => {
+  let data = await axios.get(`https://cbu.uz/uz/arkhiv-kursov-valyut/json/`)
+  currency.value = data.data
+}
+GetCurrency()
 </script>
 <template>
   <div class="container">
@@ -37,6 +45,7 @@ const postSoldProducts = async () => {
         </a>
         <div class="total">Umumiy: {{ store.totalSum }}</div>
         <loader v-if="store.loading" />
+        <div class="currency"> 1$ = {{ currency[0].Rate }} so'm </div>
       </div>
     </div>
     <div class="page flex row between wrap">

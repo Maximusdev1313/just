@@ -2,6 +2,8 @@
 import axios from "axios";
 import { ref } from "vue";
 import VueCookies from "vue-cookies";
+import { useCentralStore } from "../../stores/centralStore";
+const store = useCentralStore()
 const name = ref("");
 const phone_number = ref("");
 const password = ref();
@@ -10,7 +12,7 @@ const registerWorker = async () => {
   const user = VueCookies.get("user");
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/register-user",
+      `${store.api}/register-user`,
       {
         name: name.value,
         phone_number: phone_number.value,
