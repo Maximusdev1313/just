@@ -60,7 +60,7 @@ const postSoldProducts = async () => {
 
           <productsForChoosing v-if="store.cartOpen" />
           <div class="devider"></div>
-          <div class="title">Mahsulotlar:</div>
+
           <productsList />
         </div>
       </div>

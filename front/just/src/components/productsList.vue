@@ -48,11 +48,17 @@ onUnmounted(() => {
         <div class="name">{{ product.name }}</div>
         {{ product.price }} so'm
         <div class="flex item-center">
-          <button @click="store.incrementQuantity(product)">
+          <button
+            @click="store.incrementQuantity(product)"
+            class="large-button"
+          >
             <i class="fa-solid fa-plus"></i>
           </button>
           <input type="number" v-model="product.quantity" ref="inputRef" />
-          <button @click="store.decrementQunatity(product)">
+          <button
+            @click="store.decrementQunatity(product)"
+            class="large-button"
+          >
             <i class="fa-solid fa-minus"></i>
           </button>
         </div>
@@ -61,7 +67,7 @@ onUnmounted(() => {
         </div>
         <div class="buttons flex item-center">
           <button
-            class="ml-md delete-button"
+            class="ml-md delete-button large-button"
             @click="store.deleteProduct(product)"
           >
             <i class="fa-solid fa-trash"></i>

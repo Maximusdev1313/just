@@ -89,7 +89,7 @@ const filterAndClear = () => {
   margin-top: 20px;
 }
 .input {
-  height: 50px;
+  height: 40px;
   border-radius: 10px;
   border: none;
   -webkit-box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
@@ -101,7 +101,7 @@ const filterAndClear = () => {
   font-size: large;
 }
 button {
-  font-size: 20px;
+  font-size: 18px;
 }
 .input::placeholder {
   padding-left: 10px;
