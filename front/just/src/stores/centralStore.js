@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'http://localhost:5000/api',
+    api: 'https://justserver-x2jf.onrender.com/api',
     items: [],
     itemsForSell: [],
     cartOpen: false,
