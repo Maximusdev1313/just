@@ -18,7 +18,7 @@ const postSoldProducts = async () => {
       await store.decrementQuantityFromStore(product);
     }
     store.itemForShow = null;
-    localStorage.removeItem("productsForSell");
+
     isActive.value = true;
     location.reload();
   }
@@ -92,6 +92,14 @@ const postSoldProducts = async () => {
         Hisobot olish
       </button>
       <span class="item" v-else>{{ store.itemForShow }}</span>
+      <router-link
+        to="/notadded"
+        v-if="store.notAdded.length || store.notPatched.length"
+        ><button>
+          {{ store.notAdded.length || store.notPatched.length }} Kiritilmagan
+          mahsulotlar
+        </button></router-link
+      >
       <router-link to="/auth"
         ><button>
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish
