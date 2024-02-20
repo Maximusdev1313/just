@@ -1,5 +1,7 @@
 <script setup>
 import { toRefs } from "vue";
+import { useCentralStore } from "../stores/centralStore";
+const store = useCentralStore();
 const props = defineProps({
   products: {
     type: Array,
@@ -27,6 +29,7 @@ const { products, caption } = toRefs(props);
         <th>Kelgan narxi</th>
         <th>Narxi</th>
         <th>Soni</th>
+        <th>Vaqt</th>
       </tr>
       <tr class="" v-for="product in products" :key="product">
         <td class="name">
@@ -38,6 +41,7 @@ const { products, caption } = toRefs(props);
         <td>{{ product.entry_price }} so'm</td>
         <td>{{ product.price }} so'm</td>
         <td>{{ product.quantity }} {{ product.size }}</td>
+        <td>{{ store.formatHours(product.created) }}</td>
       </tr>
     </table>
   </div>
