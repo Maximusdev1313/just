@@ -23,6 +23,10 @@ const postSoldProducts = async () => {
     location.reload();
   }
 };
+const clearStorage = () => {
+  localStorage.removeItem("productsForSell");
+  location.reload();
+};
 </script>
 <template>
   <div class="container">
@@ -100,6 +104,7 @@ const postSoldProducts = async () => {
           mahsulotlar
         </button></router-link
       >
+      <button @click="clearStorage">Tarixni tozalash</button>
       <router-link to="/auth"
         ><button>
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish
