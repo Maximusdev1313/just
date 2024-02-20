@@ -6,7 +6,6 @@
   color-scheme: light dark;
   color: #fff;
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -55,24 +54,27 @@ button:focus-visible {
 
 .card {
   padding: 2em;
-  max-width: 70%;
+  /* max-width: 70%; */
   -webkit-box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
--moz-box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
-box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
-border-radius: 8px;
-background-color: #2d2d2e;
+  -moz-box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 1px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  border-radius: 8px;
+  background-color: #2d2d2e;
+  box-sizing: border-box;
 }
 .list{
-  background-color: #000000;
   border-radius: 15px;
 
+}
+.mode{
+  background-color: #353434;
 }
 .disable {
   background-color: #585757;
   cursor: not-allowed;
 }
 .enable {
-  background-color: #1a1a1a;
+  background-color: #3b5df5;
 }
 .w-100{
   width: 100%;
@@ -175,8 +177,12 @@ input{
   .hover:hover{
     background-color: #c2c2c2;
   }
+  .mode{
+    background-color: #f9f9f9;
+  }
   button {
     background-color: #f9f9f9;
+    
     -webkit-box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);
     -moz-box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);
     box-shadow: 1px 4px 8px 0px rgba(34, 50, 50, 0.1);

@@ -2,25 +2,25 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { nextTick } from 'vue'
 import VueCookies from "vue-cookies";
+import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserver-x2jf.onrender.com/api',
-    products: JSON.parse(localStorage.getItem('products')) || [],
+    api: 'http://localhost:5000/api',
     items: [],
     itemsForSell: [],
     cartOpen: false,
-    productsFromStorage: JSON.parse(localStorage.getItem('productsForSell')) || [],
     check: [],
-    clients: JSON.parse(localStorage.getItem('clients')) || [],
     clientIndex: 0,
     loading: false,
-    notAdded: JSON.parse(localStorage.getItem('notAdded')) || [],
     itemForShow: null,
     totalSum: 0,
+    products: JSON.parse(localStorage.getItem('products')) || [],
+    productsFromStorage: JSON.parse(localStorage.getItem('productsForSell')) || [],
+    clients: JSON.parse(localStorage.getItem('clients')) || [],
+    notAdded: JSON.parse(localStorage.getItem('notAdded')) || [],
     notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
     user: VueCookies.get('user') || null,
-
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -117,6 +117,13 @@ export const useCentralStore = defineStore('central', {
           // Log the error
           console.log(error)
         }
+      }
+    },
+    formatHours(dateString) {
+      if (dateString) {
+
+        const date = new Date(dateString);
+        return format(date, "MM-dd/HH:mm");
       }
     },
     async decrementQuantityFromStore(products) {
@@ -217,13 +224,22 @@ export const useCentralStore = defineStore('central', {
     },
     filterProductsByCode(code) {
       this.items = this.products.filter(item => item.bar_code == code);
-      if (this.items.length > 1) {
-        this.cartOpen = true
+      if (this.items.length) {
+        if (this.items.length > 1) {
+          this.cartOpen = true
+        }
+        else {
+          this.addToCart(this.items[0])
+
+          console.log(this.items, 'items');
+        }
       }
       else {
-        this.addToCart(this.items[0])
+        this.cartOpen = true
       }
       console.log(this.items);
+
+
     },
     addToCart(product) {
       // Check if the product is not already in the itemsForSell array
@@ -241,7 +257,7 @@ export const useCentralStore = defineStore('central', {
         this.itemsForSell.unshift(product)
 
         // Reset the quantity of the product
-        product.quantity = ''
+        product.quantity = 1
 
         // Close the cart
         this.cartOpen = false
@@ -254,7 +270,7 @@ export const useCentralStore = defineStore('central', {
         }
       } else {
         // If the product is already in the itemsForSell array, increment its quantity
-        product.quantity++
+        product.quantity += 1
 
         // Close the cart
         this.cartOpen = false
@@ -343,8 +359,7 @@ export const useCentralStore = defineStore('central', {
         // Clear the items for sell
         this.itemsForSell = []
 
-        // Delete the current client
-        this.deleteClient(this.clientIndex)
+
       }
     },
 
@@ -356,6 +371,8 @@ export const useCentralStore = defineStore('central', {
       this.clients.unshift([])
       this.getClient(0)
       this.setItemToStorage('clients', this.clients)
+      this.itemsForSell = []
+
     },
     setItemToStorage(name, param) {
       localStorage.setItem(name, JSON.stringify(param));
@@ -396,7 +413,7 @@ export const useCentralStore = defineStore('central', {
 
       // Get the client at the given index
       let choosedClient = this.clients[index]
-
+      console.log(choosedClient);
       // Clear the items for sell
       this.itemsForSell = []
 

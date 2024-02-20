@@ -42,23 +42,21 @@ const printElement = (elementId) => {
   window.location.reload(); // Reload the page after printing
   // window.close();
 };
-
-const formatHours = (dateString) => {
-  const date = new Date(dateString);
-  return format(date, "MM-dd/HH:mm");
-};
 </script>
 <template>
-  <div>
-    <div :id="`printElement${index}`" style="width: 208px">
+  <div class="flex col item-center">
+    <div :id="`printElement${index}`" style="width: 80%" class="mt-md">
       <div class="list">
-        <div class="title logo">Razzoq</div>
-        <div class="subtitle text-center">
-          Arzon, sifatli va bepul yetkazib berish
-        </div>
         <div class="date">
-          {{ formatHours(orders[0].created) }}
+          <span>
+            {{ store.user.name }}
+          </span>
+          <span>
+            {{ store.formatHours(orders[0].created) }}
+          </span>
         </div>
+        <div class="title logo">{{ store.user.market_name }}</div>
+
         <div class="wrapper">
           <div
             class="item flex justify-between items-center no-wrap"
@@ -93,7 +91,7 @@ const formatHours = (dateString) => {
     <button
       @click="() => printElement(`printElement${index}`)"
       type="button"
-      class="mb-md"
+      class="mb-md enable"
     >
       print
     </button>
@@ -102,8 +100,11 @@ const formatHours = (dateString) => {
 <style scoped>
 .date {
   width: 100%;
-  text-align: right;
   margin: 5px;
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
 }
 .logo {
   font-family: "Merriweather", sans-serif;
@@ -134,7 +135,8 @@ const formatHours = (dateString) => {
   min-height: 100px;
 }
 button {
-  width: 200px;
+  width: 80%;
+  margin-top: 5px;
 }
 .total {
   margin-top: 25px;

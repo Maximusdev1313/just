@@ -38,75 +38,69 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="">
-    <ul>
-      <li
+  <div class="products">
+    <div class="flex justify-center col item-center">
+      <div
+        class="lists flex between item-center"
         v-for="product in store.itemsForSell"
         :key="product"
-        class="list flex between mt-md"
       >
-        <div class="product-info">
-          <h4 class="name">{{ product.name }}</h4>
-          <div class="quantity flex mt-xl between wrap">
-            <span class="">
-              soni:
-              <input type="number" v-model="product.quantity" ref="inputRef" />
-            </span>
-
-            <span>
-              narxi:
-              {{ product.price }}
-            </span>
-            <span class="ml-md">
-              summa: {{ product.price * product.quantity }}
-            </span>
-          </div>
-        </div>
-
-        <div class="buttons flex item-center">
-          <button class="ml-md" @click="store.incrementQuantity(product)">
+        <div class="name">{{ product.name }}</div>
+        {{ product.price }} so'm
+        <div class="flex item-center">
+          <button @click="store.incrementQuantity(product)">
             <i class="fa-solid fa-plus"></i>
           </button>
-          <button class="ml-md" @click="store.decrementQunatity(product)">
+          <input type="number" v-model="product.quantity" ref="inputRef" />
+          <button @click="store.decrementQunatity(product)">
             <i class="fa-solid fa-minus"></i>
           </button>
-          <button class="ml-md" @click="store.deleteProduct(product)">
+        </div>
+        <div class="price">
+          {{ Math.ceil(product.price * product.quantity) }} so'm
+        </div>
+        <div class="buttons flex item-center">
+          <button
+            class="ml-md delete-button"
+            @click="store.deleteProduct(product)"
+          >
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
+
 <style scoped>
+.products {
+  height: 500px;
+  overflow: auto;
+}
 .name {
-  width: 80%;
+  width: 300px;
   overflow: auto;
+  font-size: larger;
 }
-h4 {
-  margin: 0;
-}
-.quantity {
-  width: 100%;
-  border: none;
-  background-color: transparent;
-}
-.product-info {
-  width: 100%;
-}
-ul {
-  list-style: none;
-  width: 800px;
-  max-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  overflow: auto;
-}
-.list {
+.lists {
   width: 90%;
-  height: 80px;
-  padding: 0 5px 0 15px;
+  padding: 20px 0;
+  border-bottom: 1px dotted #ccc;
+  box-sizing: border-box;
+}
+input {
+  margin: 0 10px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px dotted #fff;
+  text-align: center;
+}
+.price {
+  width: 200px;
+  text-align: center;
+}
+.delete-button {
+  background-color: brown;
 }
 </style>

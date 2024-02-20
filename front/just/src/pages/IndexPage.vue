@@ -9,87 +9,143 @@ import check from "../components/check.vue";
 import clients from "../components/clients.vue";
 import loader from "../components/loader.vue";
 const store = useCentralStore();
-
+const isActive = ref(false);
 const postSoldProducts = async () => {
   if (store.productsFromStorage.length) {
+    isActive.value = true;
     for (let product of store.productsFromStorage) {
       await store.postProducts(product, "sold-products");
       await store.decrementQuantityFromStore(product);
     }
     store.itemForShow = null;
     localStorage.removeItem("productsForSell");
-    // location.reload();
+    isActive.value = true;
+    location.reload();
   }
 };
 </script>
 <template>
   <div class="container">
-    <div class="drawer card">
-      <div class="w-100 flex around item-center">
-        <a @click="store.getProductsFromServer()">Mahsulot olish</a>
-        <a href="/report">Hisobot</a>
-        <a href="/auth">Chiqish</a>
+    <div class="wrapper">
+      <aside class="mode">
+        <div class="drawer-wrapper">
+          <div class="drawer">
+            <div class="content">
+              <button
+                @click="store.addClient(clients.length)"
+                class="button"
+                type="button"
+                v-if="!clients.length"
+              >
+                <i class="fas fa-plus"></i>
+                Yangi mijoz qo'shish
+              </button>
+              <button
+                @click="store.createNewClient()"
+                class="button"
+                type="button"
+                v-else
+              >
+                <i class="fas fa-plus"></i>
+                Yangi mijoz qo'shish
+              </button>
+              <clients :clients="store.clients" />
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div class="functional-section">
+        <div class="search-inputs">
+          <searchInputs />
 
-        <a @click="postSoldProducts" v-if="!store.itemForShow">Hisobot olish</a>
-        <span class="item">{{ store.itemForShow }}</span>
-        <a href="/notAdded" v-if="store.notAdded.length">
-          <div class="counter">{{ store.notAdded.length }}</div>
-        </a>
-        <div class="total">Umumiy: {{ store.totalSum }}</div>
-        <loader v-if="store.loading" />
+          <productsForChoosing v-if="store.cartOpen" />
+          <div class="devider"></div>
+          <div class="title">Mahsulotlar:</div>
+          <productsList />
+        </div>
       </div>
+      <aside class="mode">
+        <div class="drawer-wrapper">
+          <div class="drawer">
+            <check
+              v-for="(products, index) in store.productsFromStorage"
+              :key="index"
+              :orders="products"
+              :index="index"
+            />
+          </div>
+        </div>
+      </aside>
     </div>
-    <div class="page flex row between wrap">
-      <clients :clients="store.clients" />
-      <div class="inputs">
-        <searchInputs />
-        <productsForChoosing v-if="store.cartOpen" />
-
-        <productsList />
-      </div>
-      <div class="checks">
-        <check
-          v-for="(products, index) in store.productsFromStorage"
-          :key="index"
-          :orders="products"
-          :index="index"
-        />
-      </div>
-      <!-- <productsForDay /> -->
-    </div>
+    <footer class="flex between item-center">
+      <button @click="store.getProductsFromServer()" v-if="!store.loading">
+        <i class="fa-solid fa-download"></i> Mahsulot olish
+      </button>
+      <loader v-else />
+      <router-link to="/report" target="_blank"
+        ><button>
+          <i class="fas fa-chart-simple"></i> Hisobot
+        </button></router-link
+      >
+      <button @click="postSoldProducts" v-if="!store.itemForShow || isActive">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        Hisobot olish
+      </button>
+      <span class="item" v-else>{{ store.itemForShow }}</span>
+      <router-link to="/auth"
+        ><button>
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish
+        </button></router-link
+      >
+    </footer>
   </div>
 </template>
 <style scoped>
-.page {
-  margin-top: 60px;
-}
-.drawer {
+.wrapper {
   width: 100%;
-  max-width: 100%;
-  height: 50px;
-  padding: 5px;
-  position: fixed;
-
-  top: 0;
-  left: 0;
+  height: 92vh;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+aside {
+  width: 20%;
+
+  display: flex;
   align-items: center;
+  flex-direction: column;
+}
+
+.content > * {
+  width: 100%;
+}
+
+.drawer-wrapper {
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.drawer {
+  max-height: 90vh;
+  overflow-y: scroll;
+  padding: 0;
+  margin-right: -17px; /* Increase this value for wider scrollbars */
+}
+.functional-section {
+  width: 60%;
+}
+.button {
+  background-color: #3d48ee;
+  margin-top: 10px;
+  color: #fff;
 }
 .total {
-  width: 150px;
+  font-weight: bold;
+  padding: 0 20px;
 }
-.checks {
-  width: auto;
-  height: 400px;
-  overflow: auto;
-}
-.counter {
-  color: crimson;
-}
-.item {
-  width: 100px;
-  height: 50px;
-  overflow: auto;
+footer {
+  width: 100%;
+  height: 7vh;
 }
 </style>
