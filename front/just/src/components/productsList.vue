@@ -74,7 +74,8 @@ onUnmounted(() => {
 
 <style scoped>
 .products {
-  height: 500px;
+  min-height: 30vh;
+  max-height: 45vh;
   overflow: auto;
 }
 .name {

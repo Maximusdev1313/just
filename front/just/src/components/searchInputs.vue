@@ -108,6 +108,6 @@ button {
   font-size: large;
 }
 .info {
-  font-size: 24px;
+  font-size: 20px;
 }
 </style>

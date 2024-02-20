@@ -77,7 +77,7 @@ const postSoldProducts = async () => {
         </div>
       </aside>
     </div>
-    <footer class="flex between item-center">
+    <footer class="flex between item-center mode">
       <button @click="store.getProductsFromServer()" v-if="!store.loading">
         <i class="fa-solid fa-download"></i> Mahsulot olish
       </button>
@@ -103,7 +103,8 @@ const postSoldProducts = async () => {
 <style scoped>
 .wrapper {
   width: 100%;
-  height: 92vh;
+  max-height: 92vh;
+  min-height: 50vh;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -111,7 +112,7 @@ const postSoldProducts = async () => {
 
 aside {
   width: 20%;
-
+  height: 92vh;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -146,6 +147,10 @@ aside {
 }
 footer {
   width: 100%;
-  height: 7vh;
+  height: 64px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
 }
 </style>
