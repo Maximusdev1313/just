@@ -20,12 +20,8 @@ const postSoldProducts = async () => {
     store.itemForShow = null;
 
     isActive.value = true;
-    location.reload();
+    localStorage.removeItem("productsForSell");
   }
-};
-const clearStorage = () => {
-  localStorage.removeItem("productsForSell");
-  location.reload();
 };
 </script>
 <template>
@@ -104,7 +100,7 @@ const clearStorage = () => {
           mahsulotlar
         </button></router-link
       >
-      <button @click="clearStorage">Tarixni tozalash</button>
+
       <router-link to="/auth"
         ><button>
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish
