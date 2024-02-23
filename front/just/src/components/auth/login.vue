@@ -17,7 +17,8 @@ const login = async () => {
     console.log(response.data.message);
     if (response.data.message == "Muvafaqiyatli") {
       // Assuming response.data is an array
-      VueCookies.set("user", JSON.stringify(response.data), "8h");
+      VueCookies.set("user", JSON.stringify(response.data), "10h");
+      store.user = response.data;
       console.log(response.data);
       if (response.data.role == "owner") {
         router.push("/admin");
