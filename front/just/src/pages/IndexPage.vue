@@ -19,8 +19,9 @@ const postSoldProducts = async () => {
     }
     store.itemForShow = null;
 
-    isActive.value = true;
+    isActive.value = false;
     localStorage.removeItem("productsForSell");
+    location.reload();
   }
 };
 </script>
@@ -87,11 +88,11 @@ const postSoldProducts = async () => {
           <i class="fas fa-chart-simple"></i> Hisobot
         </button></router-link
       >
-      <button @click="postSoldProducts" v-if="!store.itemForShow || isActive">
+      <button @click="postSoldProducts" v-if="!isActive">
         <i class="fa-solid fa-cloud-arrow-up"></i>
         Hisobot olish
       </button>
-      <span class="item" v-else>{{ store.itemForShow }}</span>
+      <loader v-else />
       <router-link
         to="/notadded"
         v-if="store.notAdded.length || store.notPatched.length"
