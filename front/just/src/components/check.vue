@@ -1,12 +1,13 @@
+script
 <script setup>
-import { computed, toRefs, watch } from "vue";
+import { computed, toRefs, ref } from "vue";
 import { useCentralStore } from "../stores/centralStore";
-import { format } from "date-fns";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const store = useCentralStore();
 const props = defineProps({
   orders: {
-    type: Array,
+    type: Object,
     required: false,
   },
   index: {
@@ -17,7 +18,8 @@ const props = defineProps({
 const { orders, index } = toRefs(props);
 
 const grandToTalSum = computed(() => {
-  return orders.value.reduce((sum, item) => sum + item?.totalSum, 0);
+  console.log(orders.value);
+  return orders.value?.reduce((sum, item) => sum + item?.totalSum, 0);
 });
 
 const printElement = (elementId) => {
@@ -42,17 +44,27 @@ const printElement = (elementId) => {
   window.location.reload(); // Reload the page after printing
   // window.close();
 };
+const changeCheck = (order) => {
+  store.checkItemsForChange = [...order];
+  console.log(order);
+  router.push({ path: "/changeCheck" });
+};
 </script>
 <template>
   <div class="flex col item-center">
-    <div :id="`printElement${index}`" style="width: 80%" class="mt-md">
+    <div
+      :id="`printElement${index}`"
+      style="width: 80%"
+      class="mt-md"
+      @dblclick="changeCheck(orders)"
+    >
       <div class="list">
         <div class="date">
           <span>
             {{ store.user.name }}
           </span>
           <span>
-            {{ store.formatHours(orders[0].created) }}
+            {{ store.formatHours(orders[0]?.created) }}
           </span>
         </div>
         <div class="title logo">{{ store.user.market_name }}</div>
@@ -60,6 +72,7 @@ const printElement = (elementId) => {
         <div class="wrapper">
           <div
             class="item flex justify-between items-center no-wrap"
+            :class="order.status == 'changed' ? 'red' : ''"
             v-for="order in orders"
             :key="order"
           >
@@ -81,11 +94,11 @@ const printElement = (elementId) => {
           </div>
         </div>
 
-        <div class="subtitle text-black text-center q-my-sm">
+        <div class="subtitle text-black text-center mt-md q-my-sm">
           Xizmatimizdan foydalanganingiz uchun rahmat!
         </div>
-        <div class="tel">Tel: 95 091 2123, 95 643 2123</div>
-        <div class="">Saytimiz: razzoq.uz</div>
+        <div class="tel mt-md">Tel: {{ store.user.phone_number }}</div>
+        <!-- <div class="">Saytimiz: razzoq.uz</div> -->
       </div>
     </div>
     <button
@@ -140,5 +153,8 @@ button {
 }
 .total {
   margin-top: 25px;
+}
+.red {
+  color: red;
 }
 </style>

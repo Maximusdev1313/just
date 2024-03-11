@@ -4,6 +4,7 @@ import ReportPage from './pages/ReportPage.vue'
 import AuthPage from './pages/AuthPage.vue'
 import AddProductPage from './pages/AddProduct.vue'
 import NotAdded from './pages/NotAdded.vue'
+import changeCheck from './pages/ChangeCheck.vue'
 import AdminPage from './pages/AdminPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import VueCookies from 'vue-cookies'
@@ -13,6 +14,7 @@ const routes = [
   { path: '/auth', component: AuthPage },
   { path: '/addproduct', component: AddProductPage },
   { path: '/notadded', component: NotAdded },
+  { path: '/changeCheck', component: changeCheck },
   { path: '/admin', component: AdminPage, meta: { requiresRole: 'owner' } },
 ]
 // 3. Create the router instance and pass the `routes` configuration
