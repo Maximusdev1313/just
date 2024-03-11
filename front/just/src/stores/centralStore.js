@@ -21,6 +21,7 @@ export const useCentralStore = defineStore('central', {
     notAdded: JSON.parse(localStorage.getItem('notAdded')) || [],
     notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
     user: VueCookies.get('user') || null,
+    checkItemsForChange: []
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -44,8 +45,6 @@ export const useCentralStore = defineStore('central', {
           return
         }
 
-        // Log the user
-        console.log(user);
 
         // Filter the products by the market name and assign it to this.products
         this.products = this.filterProductsByMarketName(products.data, user)
@@ -59,20 +58,18 @@ export const useCentralStore = defineStore('central', {
         // Store the products in local storage
         localStorage.setItem("products", JSON.stringify(this.products))
 
-        // Log the products
-        console.log(this.products);
+
 
         // Stop loading
         this.loading = false
       } catch (error) {
         // Log any errors
-        console.log(error);
+        alert(error.message)
       }
     },
 
     filterProductsByMarketName(products, currentUser) {
       // Log the products
-      console.log(products);
 
       // Filter the products based on the market name of the current user
       // Return only those products whose market name matches with the market name of the current user
@@ -87,7 +84,6 @@ export const useCentralStore = defineStore('central', {
       // Loop through each product in the products array
       for (let product of products) {
         // Log the current product
-        console.log(product);
 
         try {
           // Make a POST request to the server with the product details
@@ -114,8 +110,6 @@ export const useCentralStore = defineStore('central', {
           // Store the notAdded array in local storage
           this.setItemToStorage('notAdded', this.notAdded)
 
-          // Log the error
-          console.log(error)
         }
       }
     },
@@ -128,7 +122,7 @@ export const useCentralStore = defineStore('central', {
     },
     async decrementQuantityFromStore(products) {
       for (let product of products) {
-        console.log(product);
+
         try {
           const response = await axios.patch(
             this.api + '/products/decrement/' + product._id,
@@ -137,8 +131,8 @@ export const useCentralStore = defineStore('central', {
               quantity: product.quantity,
             }
           );
-          console.log(response.data, 'quantity');
         } catch (error) {
+          console.log(error.message);
           this.notPatched.push(product)
           this.setItemToStorage('notPatched', this.notPatched)
 
@@ -157,7 +151,6 @@ export const useCentralStore = defineStore('central', {
     async filterByDateRange(startDate, endDate, specialApi) {
       // Fetch the report from the server using the special API
       const report = await this.getReport(specialApi);
-      console.log(report);
       const items = this.filterProductsByMarketName(report, this.user)
       // Create a new Date object for the start date and set the time to the start of the day
       let start = new Date(startDate);
@@ -175,9 +168,6 @@ export const useCentralStore = defineStore('central', {
         // Return true if the created date is within the start and end dates, false otherwise
         return createdDate >= start && createdDate <= end;
       });
-
-      // Log the start date
-      console.log(start);
 
       // Return the filtered items
       return filteredItems;
@@ -218,7 +208,6 @@ export const useCentralStore = defineStore('central', {
     filterProductsByName(name) {
       const filteredItem = this.products.filter(item => item.name.toLowerCase().includes(name.toLowerCase()));
       this.items = filteredItem.slice(-30)
-      console.log(this.items);
 
       this.cartOpen = true
     },
@@ -231,13 +220,18 @@ export const useCentralStore = defineStore('central', {
         else {
           this.addToCart(this.items[0])
 
-          console.log(this.items, 'items');
         }
       }
       else {
         this.cartOpen = true
       }
-      console.log(this.items);
+
+
+    },
+    filterItems(items, condition) {
+      return items.filter((value) => {
+        return !condition || value === condition
+      })
 
 
     },
@@ -247,8 +241,6 @@ export const useCentralStore = defineStore('central', {
         // Get the current date and time
         const date = Date.now()
 
-        // Log the date
-        console.log(date);
 
         // Set the created property of the product to the current date
         product.created = date
@@ -293,7 +285,7 @@ export const useCentralStore = defineStore('central', {
 
     removeWords(word) {
       let strword = word.toString();
-      console.log(word);
+
       strword = strword.slice(0, -1); // remove the last character
       let newWord = parseFloat(strword); // convert the string back to a wordber
       if (Number.isNaN(newWord)) {
@@ -303,8 +295,6 @@ export const useCentralStore = defineStore('central', {
     },
 
     incrementQuantityByKeypress(key, item) {
-      // Log the key pressed
-      console.log(key);
 
       // If the 'ArrowUp' key is pressed, increment the quantity of the item
       if (key == 'ArrowUp') {
@@ -332,10 +322,10 @@ export const useCentralStore = defineStore('central', {
     deleteProduct(product) {
       let index = this.itemsForSell.indexOf(product)
       this.itemsForSell.splice(index, 1)
-      console.log(this.itemsForSell);
+
     },
 
-    sellProducts() {
+    sellProducts(status) {
       // Check if there are items to sell
       if (this.itemsForSell.length) {
         // Initialize an empty array for items
@@ -346,7 +336,10 @@ export const useCentralStore = defineStore('central', {
         // Add the total sum to each item
         this.itemsForSell.forEach(product => {
           product.totalSum = product.price * product.quantity;
+          product.status = status
+          console.log(product);
         });
+
         // Add the current items for sell to the beginning of the items array
         item.unshift(this.itemsForSell)
 
@@ -365,7 +358,7 @@ export const useCentralStore = defineStore('central', {
 
     getProductFromStorage() {
       this.productsFromStorage = JSON.parse(localStorage.getItem("productsForSell"));
-      console.log(this.productsFromStorage);
+
     },
     createNewClient() {
       this.clients.unshift([])
@@ -395,8 +388,7 @@ export const useCentralStore = defineStore('central', {
         // Update the clients array
         this.clients = clients
 
-        // Log the clients array
-        console.log(clients);
+
 
         // Clear the items for sell
         this.itemsForSell = []
@@ -408,20 +400,18 @@ export const useCentralStore = defineStore('central', {
     },
 
     getClient(index) {
-      // Log the index
-      console.log(index);
+
+
 
       // Get the client at the given index
       let choosedClient = this.clients[index]
-      console.log(choosedClient);
+
       // Clear the items for sell
       this.itemsForSell = []
 
       // Set the client index to the given index
       this.clientIndex = index
 
-      // Log the client index
-      console.log(this.clientIndex);
 
       // Add each item from the chosen client to the items for sell
       choosedClient.map((cli) => {
@@ -447,7 +437,7 @@ export const useCentralStore = defineStore('central', {
           market_name: this.user.market_name,
           created: product.created
         })
-        console.log(response.data);
+
       } catch (error) {
         console.log(error);
       }
