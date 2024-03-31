@@ -44,46 +44,11 @@ async function getItems() {
       store.calculateTotalValueAndProfit(filteredItems.value)
     );
   }
-
-  // Calculating total value and profit for each status
-  all_cost_by_card.value =
-    by_card.value.length > 0
-      ? store.calculateTotalValueAndProfit(by_card.value)
-      : {};
-  all_cost_by_debt.value =
-    by_dept.value.length > 0
-      ? store.calculateTotalValueAndProfit(by_dept.value)
-      : {};
-
-  // Filtering outlays for market
-  const oulays_for_market = store.filterItems(
-    outlays.value,
-    "status",
-    "for_market"
-  );
-
-  // Function to calculate total outlays
-  const calculateTotalOutlays = (outlays) => {
-    if (!Array.isArray(outlays)) {
-      throw new Error("Invalid input: outlays must be an array");
-    }
-
-    return outlays.reduce((totalOutlay, item) => {
-      if (typeof item.price !== "number") {
-        throw new Error("Invalid item: price must be a number");
-      }
-
-      return totalOutlay + item.price;
-    }, 0);
-  };
-
-  // Calculating total outlays for market and all outlays
-  all_outlays_for_market.value = calculateTotalOutlays(oulays_for_market);
-  all_cost_by_outlays.value = calculateTotalOutlays(outlays.value);
 }
-
 watch([() => date1.value, () => date2.value], () => {
-  getItems();
+  if (date2.value) {
+    getItems();
+  }
 });
 </script>
 
