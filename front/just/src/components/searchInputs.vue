@@ -6,6 +6,9 @@ const store = useCentralStore();
 const name = ref("");
 let inputRef = ref(null);
 const code = ref("");
+
+const paid_type = ref("cash");
+
 const focusInput = async () => {
   if (inputRef.value) {
     await nextTick();
@@ -13,8 +16,12 @@ const focusInput = async () => {
     inputRef.value.focus();
   }
 };
+
 onMounted(() => {
   window.addEventListener("keydown", function (event) {
+    // Check if otherComponentOpened is true, if so, return early
+    if (store.otherComponentOpened) return;
+
     // Check if event.key is an alphabetic character
     if (/^[a-zA-Z]$/.test(event.key)) {
       focusInput();
@@ -24,6 +31,7 @@ onMounted(() => {
     }
   });
 });
+
 onUnmounted(() => {
   window.removeEventListener("keydown", focusInput);
 });
@@ -41,7 +49,7 @@ const filterAndClear = () => {
         type="text"
         name="name"
         id=""
-        label="ismingiz"
+        label="name"
         placeholder="Nomi bo'yicha"
         ref="inputRef"
         v-model="name"
@@ -52,7 +60,7 @@ const filterAndClear = () => {
         type="text"
         name="bar_code"
         id=""
-        label="ismingiz"
+        label="bar_code"
         placeholder="Bar code"
         class="input mt-md"
         v-model="code"
@@ -70,10 +78,46 @@ const filterAndClear = () => {
             {{ store.formatHours(store?.itemsForSell[0]?.created) }}
           </div>
         </div>
+        <form class="flex">
+          <label class="form-control">
+            <input
+              type="radio"
+              name="cash"
+              id="cash"
+              value="Cash"
+              v-model="paid_type"
+              checked="checked"
+            />
+            Naqt
+          </label>
+
+          <label class="form-control">
+            <input
+              type="radio"
+              name="by_card"
+              id="by_card"
+              value="by_card"
+              v-model="paid_type"
+            />
+
+            Karta orqali
+          </label>
+          <label class="form-control">
+            <input
+              type="radio"
+              name="debt"
+              id="dept"
+              value="dept"
+              v-model="paid_type"
+            />
+            Qarz
+          </label>
+        </form>
+
         <button
           type="submit"
           class="mt-md"
-          @click="store.sellProducts()"
+          @click="store.sellProducts(paid_type)"
           :class="store.itemsForSell.length ? 'enable' : 'disable'"
         >
           <i class="fas fa-basket-shopping"></i>
@@ -109,5 +153,69 @@ button {
 }
 .info {
   font-size: 20px;
+}
+
+form {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.form-control {
+  font-family: system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.1;
+  margin-left: 15px;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+}
+
+.form-control:focus-within {
+  color: #fff;
+}
+
+input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: var(--form-background);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: red;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid red;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+
+  display: grid;
+  place-content: center;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  /* Windows High Contrast Mode */
+  background-color: red;
+}
+
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="radio"]:focus {
+  outline: max(2px, 0.15em) solid red;
+  outline-offset: max(2px, 0.15em);
 }
 </style>

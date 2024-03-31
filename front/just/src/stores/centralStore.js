@@ -6,13 +6,14 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserver-x2jf.onrender.com/api',
+    api: 'http://localhost:5000/api',
     items: [],
     itemsForSell: [],
     cartOpen: false,
     check: [],
     clientIndex: 0,
     loading: false,
+    otherComponentOpened: false,
     itemForShow: null,
     totalSum: 0,
     products: JSON.parse(localStorage.getItem('products')) || [],
@@ -96,7 +97,8 @@ export const useCentralStore = defineStore('central', {
             salesman: user.name,
             size: product.size,
             market_name: user.market_name,
-            created: product.created
+            created: product.created,
+            status: product.status
           })
 
           // Assign the response message to this.itemForShow
@@ -228,13 +230,28 @@ export const useCentralStore = defineStore('central', {
 
 
     },
-    filterItems(items, condition) {
-      return items.filter((value) => {
-        return !condition || value === condition
-      })
+    filterItems(items, property, condition) {
+      // Check if items is an array and not empty
+      if (!Array.isArray(items) || !items.length) {
+        console.warn('filterItems: items should be a non-empty array');
+        return [];
+      }
 
+      // Check if property is a string and not empty
+      if (typeof property !== 'string' || !property) {
+        console.warn('filterItems: property should be a non-empty string');
+        return items;
+      }
 
+      // If condition is not provided, return all items
+      if (!condition) {
+        return items;
+      }
+
+      // Filter items based on the condition and property
+      return items.filter((item) => item[property] === condition);
     },
+
     addToCart(product) {
       // Check if the product is not already in the itemsForSell array
       if (!this.itemsForSell.some(i => i === product)) {

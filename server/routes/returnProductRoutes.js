@@ -1,10 +1,8 @@
 const express = require('express')
+const multer = require('multer')
 const router = express.Router();
 
-const API = require('../controllers/soldProducts')
+const API = require('../controllers/returnProductsControllers')
 router.get('/', API.fetchAllProducts)
 router.post('/', API.postNewProduct)
-router.patch('/:id', API.fullyUpdateProduct)
-router.get('/:id', API.fetchProductsId)
-
 module.exports = router

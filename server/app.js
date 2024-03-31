@@ -14,7 +14,7 @@ const app = express()
 const port = process.env.PORT || 5000
 process.env.TZ = "Asia/Tashkent"
 
-app.use(cors({ origin: ['https://justuz.netlify.app'] }))
+app.use(cors({ origin: ['http://localhost:5173', 'https://justuz.netlify.app'] }))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -35,6 +35,7 @@ app.use('/api/products', require('./routes/productRoutes'))
 app.use('/api/sold-products', require('./routes/soldProductRoutes'))
 app.use('/api/return-products', require('./routes/returnProductRoutes'))
 app.use('/api/entry-products', require('./routes/entryProductRoutes'))
+app.use('/api/outlays', require('./routes/outlayRoutes'))
 app.use('/api', require('./routes/users/userRoutes'))
 
 app.post('/send-sms', smsController.sendSMS);

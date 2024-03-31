@@ -49,6 +49,7 @@ exports.login = async (req, res) => {
             name: user.name,
             phone_number: user.phone_number,
             market_name: user.market_name,
+            password: user.password,
             role: user.role,
             money: user.money,
             is_active: user.is_active,

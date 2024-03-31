@@ -117,6 +117,34 @@ module.exports = class Products {
             res.status(404).json({ message: err })
         }
     }
+    static async fullyUpdateProduct(req, res) {
+        const name = req.params.name; // get the product name from the request parameters
+        const new_Products = req.body;
+        const storeName = req.body.store_name; // get the store name from the request body
+
+        try {
+            let Products = await Product.findOne({ name: name });
+
+            if (!Products) {
+                return res.status(404).json({ message: new_Products });
+            }
+
+            if (Products.store_name !== storeName) {
+                return res.status(400).json({ message: "Store name does not match" });
+            }
+
+            Products = await Product.findOneAndUpdate(
+                { name: name }, // find the product by its name
+                { $set: new_Products },
+                { new: true }
+            );
+
+            res.status(200).json(Products);
+        } catch (error) {
+            console.log(error.message);
+            res.status(200).json({ message: error.message });
+        }
+    }
     static filterItemsByName = asyncHandler(async (req, res) => {
         const query = req.query.q;
         const filteredData = await Product.find({ name: { $regex: query, $options: 'i' } });

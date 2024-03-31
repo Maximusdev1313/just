@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useCentralStore } from "../stores/centralStore";
 
 import searchInputs from "../components/searchInputs.vue";
@@ -8,8 +8,48 @@ import productsList from "../components/productsList.vue";
 import check from "../components/check.vue";
 import clients from "../components/clients.vue";
 import loader from "../components/loader.vue";
+import dialogMenu from "../components/dialogMenu.vue";
+import outlayForm from "../components/inputsForOutlays.vue";
 const store = useCentralStore();
 const isActive = ref(false);
+const isOutlay = ref(false);
+const data = ref(null);
+let reader;
+const connect = async () => {
+  if ("serial" in navigator) {
+    try {
+      const port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 9600 });
+
+      reader = port.readable.getReader();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) {
+          reader.releaseLock();
+          break;
+        }
+        // Assuming the scale returns text data
+        data.value = new TextDecoder().decode(value);
+      }
+    } catch (err) {
+      console.error("There was an error opening the serial port:", err);
+    }
+  } else {
+    console.error("Web Serial API not supported");
+  }
+};
+
+onUnmounted(() => {
+  if (reader) {
+    reader.releaseLock();
+  }
+});
+onUnmounted(() => {
+  if (reader) {
+    reader.releaseLock();
+  }
+});
+
 const postSoldProducts = async () => {
   if (store.productsFromStorage.length) {
     isActive.value = true;
@@ -60,11 +100,13 @@ const postSoldProducts = async () => {
           <searchInputs />
 
           <productsForChoosing v-if="store.cartOpen" />
+
           <div class="devider"></div>
 
           <productsList />
         </div>
       </div>
+
       <aside class="mode">
         <div class="drawer-wrapper">
           <div class="drawer">
@@ -78,6 +120,16 @@ const postSoldProducts = async () => {
         </div>
       </aside>
     </div>
+
+    <dialog-menu
+      :content="'salom'"
+      :isActive="isOutlay"
+      v-if="isOutlay"
+      @close="isOutlay = false"
+    >
+      <outlayForm @close="isOutlay = false" />
+    </dialog-menu>
+
     <footer class="flex between item-center mode">
       <button @click="store.getProductsFromServer()" v-if="!store.loading">
         <i class="fa-solid fa-download"></i> Mahsulot olish
@@ -101,7 +153,9 @@ const postSoldProducts = async () => {
           mahsulotlar
         </button></router-link
       >
-
+      <button @click="(isOutlay = true), (store.otherComponentOpened = true)">
+        Chiqimlar
+      </button>
       <router-link to="/auth"
         ><button>
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish

@@ -19,7 +19,6 @@ store.totalSum = computed(() => {
 });
 onMounted(() => {
   document.addEventListener("keypress", function (event) {
-    console.log(event.key);
     var charCode = event.which ? event.which : event.keyCode;
     if (
       (charCode >= 48 && charCode <= 57 && store?.itemsForSell.length) ||

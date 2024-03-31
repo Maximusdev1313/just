@@ -20,6 +20,8 @@ router.get('/', API.fetchAllProducts)
 router.get('/:id', API.fetchProductsId)
 router.post('/', upload, API.createProducts)
 router.patch('/:id', upload, API.updateProducts)
+router.patch('/:name/full', upload, API.fullyUpdateProduct)
+
 router.delete('/:id', API.deleteProducts)
 router.patch('/decrement/:id', API.decrementProductsQuantity)
 router.post('/filter-name', API.filterItemsByName)

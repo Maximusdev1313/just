@@ -25,18 +25,6 @@ const store = useCentralStore();
   </div>
 </template>
 <style scoped>
-.big-layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: #8d8b8b65;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .list-item {
   border-bottom: 1px solid #fff;
   padding: 5px;

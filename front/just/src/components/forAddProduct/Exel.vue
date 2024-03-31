@@ -62,6 +62,33 @@ const postProduct = async () => {
     }
   }
 };
+const patchProducts = async () => {
+  for (let product of rowObject.value) {
+    try {
+      console.log(product._id);
+      console.log(product.name);
+      console.log(product.quantity);
+      const response = await axios.patch(
+        `${store.api}/products/${product.name}/full`,
+        {
+          name: product.name,
+          bar_code: product.bar_code,
+          category: product.category,
+          entry_price: product.entry_price,
+          price: product.price,
+          market_name: store.user.market_name,
+          discount_price: product.discount_price,
+          size: product.size,
+          quantity_in_store: product.quantity_in_store,
+          quantity: product.quantity,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 </script>
 
 <template>
@@ -74,7 +101,8 @@ const postProduct = async () => {
         @change="handleFileChange"
       />
       <button @click="handleButtonClick">Convert</button>
-      <button @click="postProduct">bos</button>
+      <button @click="postProduct">Yangi qo'shish</button>
+      <button @click="patchProducts">O'zgartirish</button>
       <pre>{{ rowObject }}</pre>
     </div>
   </div>
