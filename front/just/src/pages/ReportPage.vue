@@ -4,7 +4,7 @@ import { ref, reactive, watch } from "vue";
 // Importing the central store
 import { useCentralStore } from "../stores/centralStore";
 import Table from "../components/Table.vue";
-import outlaysList from "../components/outlaysList.vue";
+// import outlaysList from "../components/outlaysList.vue";
 // Initializing the store
 const store = useCentralStore();
 // Initializing date references
@@ -29,9 +29,8 @@ const all_cost_by_outlays = ref(0);
 // Function to get items based on date range and filter them by status
 async function getItems() {
   // Fetching filtered items and outlays concurrently using Promise.all
-  [filteredItems.value, outlays.value] = await Promise.all([
+  [filteredItems.value] = await Promise.all([
     store.filterByDateRange(date1.value, date2.value, "sold-products"),
-    store.filterByDateRange(date1.value, date2.value, "outlays"),
   ]);
 
   // Filtering items by status
@@ -85,13 +84,9 @@ watch([() => date1.value, () => date2.value], () => {
           <div>
             Umumiy sotilgan: {{ state.totalValue }} so'm - Karta orqali:
             {{ all_cost_by_card?.totalValue }} so'm - Xarajatlar:
-            {{ all_cost_by_outlays }} so'm = Sizdagi naqt pul:
+            <!-- {{ all_cost_by_outlays }} so'm = Sizdagi naqt pul: -->
             <span>
-              {{
-                state.totalValue -
-                all_cost_by_card?.totalValue -
-                all_cost_by_outlays
-              }}
+              {{ state.totalValue - all_cost_by_card?.totalValue }}
               so'm
             </span>
           </div>
@@ -102,8 +97,8 @@ watch([() => date1.value, () => date2.value], () => {
             Karta orqali: {{ all_cost_by_card?.totalValue }} so'm
           </div>
           <div class="">Qarz: {{ all_cost_by_debt?.totalValue }} so'm</div>
-          <div class="">Bozorlik uchun: {{ all_outlays_for_market }} so'm</div>
-          <div class="">Xarajatlar: {{ all_cost_by_outlays }} so'm</div>
+          <!-- <div class="">Bozorlik uchun: {{ all_outlays_for_market }} so'm</div>
+          <div class="">Xarajatlar: {{ all_cost_by_outlays }} so'm</div> -->
         </div>
       </div>
 
@@ -124,7 +119,7 @@ watch([() => date1.value, () => date2.value], () => {
         :caption="'Qarz orqali'"
         v-if="by_dept.length"
       />
-      <outlays-list :outlays="outlays" :caption="'Xarajatlar'" />
+      <!-- <outlays-list :outlays="outlays" :caption="'Xarajatlar'" /> -->
     </div>
   </div>
 </template>
