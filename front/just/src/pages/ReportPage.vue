@@ -81,22 +81,24 @@ watch([() => date1.value, () => date2.value], () => {
             Umumiy foyda:
             {{ state.totalProfit }} so'm
           </div>
-          <div>
+          <!-- <div >
             Umumiy sotilgan: {{ state.totalValue }} so'm - Karta orqali:
             {{ all_cost_by_card?.totalValue }} so'm - Xarajatlar:
-            <!-- {{ all_cost_by_outlays }} so'm = Sizdagi naqt pul: -->
+            {{ all_cost_by_outlays }} so'm = Sizdagi naqt pul:
             <span>
-              {{ state.totalValue - all_cost_by_card?.totalValue }}
+              {{ state?.totalValue - all_cost_by_card?.totalValue }}
               so'm
             </span>
-          </div>
+          </div> -->
         </div>
 
         <div class="">
-          <div class="">
+          <div class="" v-if="all_cost_by_card.totalValue">
             Karta orqali: {{ all_cost_by_card?.totalValue }} so'm
           </div>
-          <div class="">Qarz: {{ all_cost_by_debt?.totalValue }} so'm</div>
+          <div class="" v-if="all_cost_by_debt.totalValue">
+            Qarz: {{ all_cost_by_debt?.totalValue }} so'm
+          </div>
           <!-- <div class="">Bozorlik uchun: {{ all_outlays_for_market }} so'm</div>
           <div class="">Xarajatlar: {{ all_cost_by_outlays }} so'm</div> -->
         </div>

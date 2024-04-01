@@ -102,7 +102,7 @@ const patchProducts = async (product) => {
           <td>{{ product.quantity }} {{ product.size }}</td>
           <td>{{ product.quantity * product.price }} so'm</td>
           <td>{{ store.formatHours(product.created) }}</td>
-          <td>
+          <!-- <td>
             <div class="button-group" v-if="product.status != 'dept'">
               <div class="functional-buttons">
                 <button @click="decrementQuantity(product)">
@@ -117,7 +117,7 @@ const patchProducts = async (product) => {
                 <button @click="patchProducts(product)">bajarish</button>
               </div>
             </div>
-          </td>
+          </td> -->
         </tr>
       </table>
     </div>
