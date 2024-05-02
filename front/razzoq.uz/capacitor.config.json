@@ -1,0 +1,8 @@
+{
+  "appId": "razzoq.uz.com",
+  "appName": "Razzoq market",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

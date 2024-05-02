@@ -152,6 +152,7 @@ export const useCentralStore = defineStore('central', {
     },
     async filterByDateRange(startDate, endDate, specialApi) {
       // Fetch the report from the server using the special API
+
       const report = await this.getReport(specialApi);
       const items = this.filterProductsByMarketName(report, this.user)
       // Create a new Date object for the start date and set the time to the start of the day
@@ -170,7 +171,7 @@ export const useCentralStore = defineStore('central', {
         // Return true if the created date is within the start and end dates, false otherwise
         return createdDate >= start && createdDate <= end;
       });
-
+      console.log(filteredItems);
       // Return the filtered items
       return filteredItems;
     },
