@@ -39,8 +39,14 @@ let PostProduct = async (api, product) => {
 };
 
 let Post = async (product) => {
-  if (product.bar_code == "") {
-    alert("Barcod kodi bo'sh qoldi");
+  if (
+    !product.bar_code ||
+    !product.price ||
+    !product.entry_price ||
+    !product.name ||
+    !product.quantity_in_store
+  ) {
+    alert("Iltimos barcha kataklarni to'ldiring!");
     return;
   } else {
     console.log(productDetails.value);

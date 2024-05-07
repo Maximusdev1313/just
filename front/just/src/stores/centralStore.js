@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserver-x2jf.onrender.com/api',
+    api: 'https://justserv.netlify.app/.netlify/functions/app/api',
     items: [],
     itemsForSell: [],
     cartOpen: false,
