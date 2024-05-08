@@ -1,21 +1,26 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { nextTick } from 'vue'
+import { nextTick, onMounted } from 'vue'
 // import VueCookies from "vue-cookies";
 // import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
     state: () => ({
         api: 'https://justserv.netlify.app/.netlify/functions/app/api',
-        products: JSON.parse(localStorage.getItem("products")) || [],
+        products: JSON.parse(sessionStorage.getItem("products")) || [],
         cartItems: JSON.parse(localStorage.getItem("cart_items")) || [],
         client: [],
-
-
+        clientId: JSON.parse(localStorage.getItem("clientId")) || [],
+        changed: ''
     }),
     getters: {
         subTotal: state => state.cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
-        lastProducts: state => state.products.slice(-6).reverse(),
+        lastProducts: state => state.products.slice(-12).reverse(),
+        flour: state => state.products.filter(product => product.category == 'Un mahsulotlari').reverse(),
+        sausage: state => state.products.filter(product => product.category == 'Kolbasa').reverse(),
+        oil: state => state.products.filter(product => product.category == "Yog' mahsulotlari").reverse(),
+        water: state => state.products.filter(product => product.category == 'Suvlar').reverse(),
+        important: state => state.products.filter(product => product.status == 'Important').reverse(),
     },
     actions: {
         async getProducts() {
@@ -24,7 +29,7 @@ export const useCentralStore = defineStore('central', {
                 const response = await axios.get(this.api + '/products')
                 this.products = response.data
                 this.products = this.filterItems(this.products, 'market_name', 'Razzoq market')
-                localStorage.setItem("products", JSON.stringify(this.products))
+                sessionStorage.setItem("products", JSON.stringify(this.products))
                 console.log(this.products);
             } catch (error) {
                 console.log(error.message);
@@ -67,14 +72,26 @@ export const useCentralStore = defineStore('central', {
             localStorage.setItem('cart_items', JSON.stringify(this.cartItems));
         },
         async getClientInfo() {
-            const clientId = localStorage.getItem('clientId')
-            try {
-                let res = await axios.get(this.api + '/orders/' + clientId)
-                this.client = res.data
+            console.log(this.clientId);
+            for (let client of this.clientId) {
+                console.log(client);
+                try {
+                    let res = await axios.get(this.api + '/orders/' + client)
+                    this.client.push(res.data)
+                    console.log(this.client[0]);
+
+                }
+                catch (err) {
+                    console.log(err);
+                }
             }
-            catch (err) {
-                console.log(err);
-            }
-        }
-    }
+        },
+
+
+
+
+    },
+
+
+
 })

@@ -21,6 +21,7 @@ let ChanageProduct = async (item) => {
       discount_price: item.discount_price,
       minimal_quantity: item.minimal_quantity,
       status: item.status,
+      category: item.category,
     });
     console.log(data);
     isLoad.value = false;
@@ -48,6 +49,7 @@ let ChanageProduct = async (item) => {
         <th class="w-8">Qolgan Maxsulot</th>
         <th class="w-7">Soni</th>
         <th class="w-11">Tasnifi</th>
+        <th class="w-11">Kategoriya</th>
         <th class="w-8">Chegirma Narxi</th>
         <th class="w-7">Minimal Miqrori</th>
         <th class="w-11">Status</th>
@@ -91,6 +93,9 @@ let ChanageProduct = async (item) => {
         </td>
         <td>
           <textarea v-model="item.description" rows="3" />
+        </td>
+        <td>
+          <input v-model="item.category" type="text" />
         </td>
         <td>
           <input v-model="item.discount_price" type="number" />

@@ -13,6 +13,7 @@
     "@capacitor/core": "^5.7.4",
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
+    "pusher-js": "^8.4.0-rc2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

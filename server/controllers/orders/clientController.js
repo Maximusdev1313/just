@@ -5,7 +5,15 @@ var fs = require('fs');
 const mongoose = require('mongoose')
 const crypto = require('crypto');
 const asyncHandler = require("express-async-handler");
+const Pusher = require("pusher");
 
+const pusher = new Pusher({
+    appId: "1797355",
+    key: "c9c37556d36119edfc7a",
+    secret: "fb3677b9cc9cdb9c66bc",
+    cluster: "ap2",
+    useTLS: true
+});
 module.exports = class Order {
     static getAllClients = async (req, res) => {
         try {
@@ -32,18 +40,21 @@ module.exports = class Order {
         }
     })
     static async updateClient(req, res) {
-        const id = req.params.id
-        const hashed_id = new mongoose.Types.ObjectId(crypto.createHash('md5').update(id).digest('hex').substring(0, 24))
+        const id = req.params.id;
+        const hashed_id = new mongoose.Types.ObjectId(crypto.createHash('md5').update(id).digest('hex').substring(0, 24));
 
-        let newClient = req.body
+        let newClient = req.body;
         try {
-            await Client.findByIdAndUpdate(hashed_id, newClient)
-            res.status(200).json({ message: 'updated successfully lin' })
+            await Client.findByIdAndUpdate(hashed_id, newClient);
+            // Trigger a 'client-updated' event with the updated client data
+            pusher.trigger('my-channel', 'my-event', newClient);
+            res.status(200).json({ message: 'updated successfully lin' });
         } catch (error) {
-            res.status(404).json({ message: error.message })
+            res.status(404).json({ message: error.message });
             console.log(error);
         }
     }
+
     static async deleteClient(req, res) {
         const id = req.params.id;
         try {

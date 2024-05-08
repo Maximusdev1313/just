@@ -29,14 +29,16 @@ const all_cost_by_outlays = ref(0);
 // Function to get items based on date range and filter them by status
 async function getItems() {
   // Fetching filtered items and outlays concurrently using Promise.all
-  [filteredItems.value] = await Promise.all([
-    store.filterByDateRange(date1.value, date2.value, "sold-products"),
-  ]);
+  filteredItems.value = await store.filterByDateRange(
+    date1.value,
+    date2.value,
+    "sold-products"
+  );
 
   // Filtering items by status
-  by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
-  by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
-
+  // by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
+  // by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
+  console.log(filteredItems.value, "fil;");
   if (filteredItems.value.length > 0) {
     Object.assign(
       state,
@@ -69,7 +71,7 @@ watch([() => date1.value, () => date2.value], () => {
     </div>
     <div class="devider"></div>
 
-    <div class="info mt-xl" v-if="state.totalEntryValue">
+    <div class="info mt-xl" v-if="filteredItems.length">
       <div class="informations flex between">
         <div class="total-values">
           <div class="">Umumiy sotilgan: {{ state.totalValue }} so'm</div>
@@ -106,12 +108,8 @@ watch([() => date1.value, () => date2.value], () => {
 
       <div class="devider"></div>
 
-      <Table
-        :products="filteredItems"
-        :caption="'Umumiy'"
-        v-if="filteredItems.length"
-      />
-      <Table
+      <Table :products="filteredItems" :caption="'Umumiy'" />
+      <!-- <Table
         :products="by_card"
         :caption="'Karta orqali'"
         v-if="by_card.length"
@@ -120,7 +118,7 @@ watch([() => date1.value, () => date2.value], () => {
         :products="by_dept"
         :caption="'Qarz orqali'"
         v-if="by_dept.length"
-      />
+      /> -->
       <!-- <outlays-list :outlays="outlays" :caption="'Xarajatlar'" /> -->
     </div>
   </div>

@@ -64,6 +64,12 @@ const postSoldProducts = async () => {
     location.reload();
   }
 };
+const filte = () => {
+  const no = store.products.filter((item) => {
+    return !item.entry_price;
+  });
+  console.log(no);
+};
 </script>
 <template>
   <div class="container">
@@ -129,7 +135,7 @@ const postSoldProducts = async () => {
     >
       <outlayForm @close="isOutlay = false" />
     </dialog-menu>
-
+    <button @click="filte()">fil</button>
     <footer class="flex between item-center mode">
       <button @click="store.getProductsFromServer()" v-if="!store.loading">
         <i class="fa-solid fa-download"></i> Mahsulot olish

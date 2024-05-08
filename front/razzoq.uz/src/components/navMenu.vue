@@ -15,7 +15,7 @@ const store = useCentralStore();
         <div class="round2">
           <i class="fa-solid fa-cart-shopping fa-xl icon"></i>
           <div class="item-quantity">
-            {{ store.subTotal }}
+            {{ store.subTotal > 0 ? store.subTotal : "" }}
           </div>
         </div>
       </div>
@@ -24,6 +24,13 @@ const store = useCentralStore();
       <div class="round">
         <div class="round2">
           <i class="fa-solid fa-heart fa-xl"></i>
+        </div>
+      </div>
+    </router-link>
+    <router-link to="/wait-room" active-class="active" class="nav-link">
+      <div class="round">
+        <div class="round2">
+          <i class="fa-solid fa-user fa-xl"></i>
         </div>
       </div>
     </router-link>

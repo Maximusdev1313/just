@@ -1,47 +1,91 @@
 <script setup>
+import { onBeforeMount, onUnmounted, watch } from "vue";
 import { useCentralStore } from "../stores/sentralStore";
+import pusher from "../pusher";
 
+import orderList from "../components/orderList.vue";
 const store = useCentralStore();
-store.getClientInfo();
+function connect() {
+  console.log("connn");
+  const channel = pusher.subscribe("my-channel");
+  channel.bind("client-updated", (data) => {
+    console.log(data);
+    updateClient(data);
+  });
+}
+
+function updateClient(data) {
+  // Find the client in the client array using the client ID
+  let clientIndex = store.client.findIndex((c) => c._id === data._id);
+  console.log("ish");
+  // If the client is found, update it
+  if (clientIndex !== -1) {
+    store.client[clientIndex].status = data.status;
+    console.log(store.client[clientIndex]);
+  }
+}
+onBeforeMount(() => {
+  store.getClientInfo();
+  connect();
+});
+
+onUnmounted(() => {
+  store.client = [];
+});
 </script>
 
 <template>
   <div>
     <div class="wrapper">
-      <h3 class="title">Buyurtmangiz qabul qilindi</h3>
-      <ul v-if="store.client.length > 0">
-        <li class="list" v-for="product in store.client" :key="product">
-          <span
-            ><span class="name">{{ product.name }} </span> x
-            {{ product.quantity }}</span
-          >
-          <span>{{ product.price * product.quantity }} so'm</span>
-        </li>
-
-        <li class="flex justify-between subtotal">
-          <span>Yetkazib berish:</span> <span>0 so'm</span>
-        </li>
-        <li class="flex justify-between subtotal">
-          <span>Jami:</span> <span>{{ store.subTotal }} so'm</span>
-        </li>
-        <li class="flex justify-between time">
-          <span>Yetkazib berish taxminiy vaqti:</span> <span>20 daqiqa</span>
-        </li>
-      </ul>
+      <div class="title">Buyurtmalar</div>
+      <div class="wrapper">
+        <ul v-for="client in store.client" :key="client">
+          <h3 class="title">
+            {{
+              client.status == "waiting"
+                ? "Buyurtma berildi"
+                : client.status == "delivering"
+                ? "Buyurtmangiz yetkazib berishda"
+                : "Buyurtma yopilgan"
+            }}
+          </h3>
+          <li class="list title">
+            <span>Buyurtmachi:</span> <span>{{ client.name }}</span>
+          </li>
+          <li class="list">
+            <span>Mobil raqam:</span> <span>{{ client.phone_number }}</span>
+          </li>
+          <li class="list">
+            <span>Manzil:</span> <span>{{ client.address }}</span>
+          </li>
+          <div class="devider"></div>
+          <order-list :products="client.orders" />
+          <li class="list subtotal">
+            <span>Yetkazib berish:</span> <span>0 so'm</span>
+          </li>
+          <li class="list subtotal">
+            <span>Jami:</span>
+            <span>{{ client.total_order_price }} so'm</span>
+          </li>
+          <li class="list time">
+            <span>Yetkazib berish taxminiy vaqti:</span> <span>20 daqiqa</span>
+          </li>
+        </ul>
+      </div>
     </div>
+    <div class="spacer"></div>
   </div>
 </template>
 <style scoped>
+.title {
+  font-size: larger;
+  font-weight: bolder;
+  text-align: center;
+  margin: 10px 0;
+}
 ul {
   padding: 10px 10px;
   border: 1.3px solid #575353;
-}
-.list {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid grey;
-  padding: 10px 0;
 }
 .subtotal {
   font-size: large;
@@ -52,10 +96,16 @@ ul {
 .time {
   font-size: small;
 }
-.name {
-  width: 59%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.spacer {
+  height: 100px;
+}
+.list {
+  display: flex;
+  justify-content: space-between;
+}
+.devider {
+  width: 100%;
+  border: 1px solid grey;
+  margin: 10px 0;
 }
 </style>
