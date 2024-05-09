@@ -25,7 +25,7 @@ const { products } = toRefs(props);
         <img src="../assets/cart.png" alt="image" class="image" />
       </div>
       <div class="card__category">{{ item.category }}</div>
-      <div class="card__title">{{ item.name }}</div>
+      <div class="card__title">{{ item.name.toUpperCase() }}</div>
       <div class="card__price">{{ item.price }} so'm</div>
 
       <div class="add-button">

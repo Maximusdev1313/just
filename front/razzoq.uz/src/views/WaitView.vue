@@ -1,8 +1,8 @@
 <script setup>
-import { onBeforeMount, onUnmounted, watch } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 import { useCentralStore } from "../stores/sentralStore";
 import pusher from "../pusher";
-
+import loader from "../components/loading.vue";
 import orderList from "../components/orderList.vue";
 const store = useCentralStore();
 function connect() {
@@ -24,7 +24,7 @@ function updateClient(data) {
     console.log(store.client[clientIndex]);
   }
 }
-onBeforeMount(() => {
+onMounted(() => {
   store.getClientInfo();
   connect();
 });
@@ -36,7 +36,9 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div class="wrapper">
+    <!-- Loading -->
+    <loader v-if="!store.client.length" />
+    <div class="wrapper" v-else>
       <div class="title">Buyurtmalar</div>
       <div class="wrapper">
         <ul v-for="client in store.client" :key="client">

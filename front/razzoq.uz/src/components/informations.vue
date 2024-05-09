@@ -4,20 +4,22 @@
   <div>
     <div class="wrapper">
       <div class="icon"><i class="fa-solid fa-truck fa-bounce fa-xl"></i></div>
-      <div class="title">title ipsum dolor sit amet</div>
-      <div class="sub-title">Lorem ipsum dolor sit amet, consectetur</div>
+      <div class="title">"Tezkor yetkazib berish"</div>
+      <div class="sub-title">
+        Buyurtmangiz 20-daqiqa ichida yetkazib beriladi
+      </div>
     </div>
     <div class="wrapper">
       <div class="icon">
         <i class="fa-solid fa-dollar-sign fa-beat fa-xl"></i>
       </div>
-      <div class="title">title ipsum dolor sit amet</div>
-      <div class="sub-title">Lorem ipsum dolor sit amet, consectetur</div>
+      <div class="title">Bepul yetkazib berish</div>
+      <div class="sub-title">Hech qanday shartlarsiz yetkazib berish</div>
     </div>
     <div class="wrapper">
       <div class="icon"><i class="fa-solid fa-rotate fa-spin fa-xl"></i></div>
-      <div class="title">title</div>
-      <div class="sub-title">Lorem ipsum dolor sit amet, consectetur</div>
+      <div class="title">Mahsulotni almashtirish imkoniyati</div>
+      <div class="sub-title">Sizga ma'qul kelmasa almashtirish mumkin</div>
     </div>
   </div>
 </template>

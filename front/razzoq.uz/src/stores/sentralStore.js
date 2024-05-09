@@ -11,7 +11,9 @@ export const useCentralStore = defineStore('central', {
         cartItems: JSON.parse(localStorage.getItem("cart_items")) || [],
         client: [],
         clientId: JSON.parse(localStorage.getItem("clientId")) || [],
-        changed: ''
+        changed: '',
+        filteredItem: [],
+        searchName: ''
     }),
     getters: {
         subTotal: state => state.cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
@@ -86,6 +88,15 @@ export const useCentralStore = defineStore('central', {
                 }
             }
         },
+        searchProducts(name) {
+            this.filteredItem = this.products.filter(product => {
+
+                return product?.name.toLowerCase().includes(name.toLowerCase())
+            })
+            this.filteredItem = this.filteredItem.slice(-10)
+            console.log(this.filteredItem)
+
+        }
 
 
 

@@ -15,9 +15,9 @@ const isLoading = ref(false);
 
 function setId() {
   clientId.value = Date.now() + Math.floor(Math.random() * 10000).toString();
-  let clientIdArray = JSON.parse(localStorage.getItem("clientId")) || [];
-  clientIdArray.unshift(clientId.value);
-  localStorage.setItem("clientId", JSON.stringify(clientIdArray));
+
+  store.clientId.unshift(clientId.value);
+  localStorage.setItem("clientId", JSON.stringify(store.clientId));
 }
 
 const postClientInfo = async () => {
@@ -98,9 +98,11 @@ const sendOrder = async () => {
     isLoading.value = true;
     await callLocation();
     await postClientInfo();
-    postOrders();
+    await postOrders();
     isLoading.value = false;
     localStorage.removeItem("cart_items");
+    store.cartItems = [];
+    store.products = [];
     router.push("/wait-room");
   }
 };

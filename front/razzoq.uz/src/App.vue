@@ -17,7 +17,7 @@ router.afterEach((to, from) => {
 
 <template>
   <div class="">
-    <router-link to="/">
+    <router-link to="/search">
       <header>
         <search-bar />
       </header>
