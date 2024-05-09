@@ -73,6 +73,7 @@ onUnmounted(() => {
             <span>Yetkazib berish taxminiy vaqti:</span> <span>20 daqiqa</span>
           </li>
         </ul>
+        <loader v-if="store.isLoading" />
       </div>
     </div>
     <div class="spacer"></div>

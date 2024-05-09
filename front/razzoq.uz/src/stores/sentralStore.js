@@ -13,7 +13,8 @@ export const useCentralStore = defineStore('central', {
         clientId: JSON.parse(localStorage.getItem("clientId")) || [],
         changed: '',
         filteredItem: [],
-        searchName: ''
+        searchName: '',
+        isLoading: false
     }),
     getters: {
         subTotal: state => state.cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
@@ -74,7 +75,7 @@ export const useCentralStore = defineStore('central', {
             localStorage.setItem('cart_items', JSON.stringify(this.cartItems));
         },
         async getClientInfo() {
-            console.log(this.clientId);
+            this.isLoading = true
             for (let client of this.clientId) {
                 console.log(client);
                 try {
@@ -84,9 +85,10 @@ export const useCentralStore = defineStore('central', {
 
                 }
                 catch (err) {
-                    console.log(err);
+                    this.isLoading = false
                 }
             }
+            this.isLoading = false
         },
         searchProducts(name) {
             this.filteredItem = this.products.filter(product => {

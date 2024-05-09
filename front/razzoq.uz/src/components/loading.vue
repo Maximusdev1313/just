@@ -23,7 +23,7 @@
 .loader::after {
   content: "";
   grid-area: 1/1;
-  --c: no-repeat radial-gradient(farthest-side, #25b09b 92%, #0000);
+  --c: no-repeat radial-gradient(farthest-side, #064b20 92%, #036e1100);
   background: var(--c) 50% 0, var(--c) 50% 100%, var(--c) 100% 50%,
     var(--c) 0 50%;
   background-size: 12px 12px;

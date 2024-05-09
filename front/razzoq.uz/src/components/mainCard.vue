@@ -71,6 +71,9 @@ const { products } = toRefs(props);
   text-transform: capitalize;
   font-size: small;
   color: rgb(151, 150, 150);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .card__title {
   max-width: 150px;
