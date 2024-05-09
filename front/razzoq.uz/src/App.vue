@@ -49,7 +49,8 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .spacer {
-  height: 60px;
+  height: 61px;
+  background-color: rgba(13, 104, 3, 0.646);
 }
 footer {
   position: fixed;

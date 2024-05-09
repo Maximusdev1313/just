@@ -1,13 +1,7 @@
 <script setup></script>
 
 <template>
-  <div>
-    <spline-viewer
-      class="wrapper"
-      hint
-      loading-anim-type="spinner-small-light"
-      url="https://prod.spline.design/PDVT9s24vOigG258/scene.splinecode"
-    ></spline-viewer>
+  <div class="wrapper">
     <div class="contents">
       <div class="sub-content">Razzoq market</div>
       <div class="content">Siz dam oling biz bozorlik qilamiz</div>
@@ -19,25 +13,24 @@
 <style scoped>
 .wrapper {
   width: 100%;
-  height: 400px;
+  height: 350px;
   background-color: aquamarine;
-  /* background-image: url("../assets/heroImage.png");
+  background-image: url("../assets/scooter_mobile.png");
   background-size: cover;
-  background-repeat: no-repeat; */
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: start;
+  align-items: center;
   -webkit-border-bottom-right-radius: 15px;
   -webkit-border-bottom-left-radius: 15px;
   -moz-border-radius-bottomright: 15px;
   -moz-border-radius-bottomleft: 15px;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 .contents {
-  margin-top: 20px;
   margin-left: 20px;
-  position: relative;
+
   color: #fff;
 }
 .content {

@@ -54,7 +54,7 @@ if (!store.products.length) {
   height: 100px;
 }
 .info {
-  margin-top: 150px;
+  margin-top: 50px;
 }
 /* main {
   margin-top: 50px;
