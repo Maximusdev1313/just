@@ -45,7 +45,7 @@ const unmute = () => {
 function connect() {
   console.log("connn");
   const clientChannel = pusher.subscribe("my-channel");
-  clientChannel.bind("client-created", (data) => {
+  clientChannel.bind("my-event", (data) => {
     console.log(data, "data");
     store.addOrders(data.clientData);
   });

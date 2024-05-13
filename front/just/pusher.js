@@ -1,7 +1,7 @@
 import Pusher from 'pusher-js';
 Pusher.logToConsole = true;
-const pusher = new Pusher('5ebb4112c8b3258dbaae', {
-    cluster: 'ap2',
+const pusher = new Pusher('87f10baf18f1f0f0ecf4', {
+    cluster: 'ap1',
     encrypted: true,
 });
 

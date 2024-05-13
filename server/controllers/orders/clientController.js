@@ -8,10 +8,10 @@ const asyncHandler = require("express-async-handler");
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
-    appId: "1801677",
-    key: "5ebb4112c8b3258dbaae",
-    secret: "46ae4500af3450a24b3e",
-    cluster: "ap2",
+    appId: "1801927",
+    key: "87f10baf18f1f0f0ecf4",
+    secret: "81fbf7bbbc8ee6f43fbb",
+    cluster: "ap1",
     useTLS: true
 });
 module.exports = class Order {
@@ -75,7 +75,7 @@ module.exports = class Order {
             // set the value of the _id field to the value of the clientId field
             clientData._id = new mongoose.Types.ObjectId(crypto.createHash('md5').update(clientData.clientId).digest('hex').substring(0, 24))
             console.log(clientData._id);
-            pusher.trigger('my-channel', 'client-created', { clientData });
+            pusher.trigger('my-channel', 'my-event', { clientData });
 
             await Client.create([clientData]);
             res.status(201).json({ clientData });
