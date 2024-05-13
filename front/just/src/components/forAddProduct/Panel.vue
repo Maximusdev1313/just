@@ -11,8 +11,8 @@ let ChangeName = (newName) => {
   <div class="w-100 flex justify-center">
     <div class="content flex between">
       <button @click="store.getProductsFromServer">Mahsulotlarni olish</button>
-      <button @click="ChangeName('add')">Maxshulot qo'shish</button>
-      <button @click="ChangeName('change')">Maxshulotni taxrirlash</button>
+      <button @click="ChangeName('add')">Maxsulot qo'shish</button>
+      <button @click="ChangeName('change')">Maxsulotni taxrirlash</button>
       <button @click="ChangeName('exel')">Exel orqali</button>
     </div>
   </div>

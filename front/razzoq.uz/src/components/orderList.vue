@@ -19,7 +19,8 @@ const { products } = toRefs(props);
         ><span class="name">{{ product.name }} </span> x
         {{ product.quantity }}</span
       >
-      <span>{{ product.price * product.quantity }} so'm</span>
+
+      <span> || {{ product.price * product.quantity }} so'm</span>
     </li>
   </div>
 </template>

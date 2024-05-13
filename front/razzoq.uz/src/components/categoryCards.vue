@@ -40,7 +40,7 @@ const changeLink = (link) => {
           Og'ir ko'tarib nima qilasiz? Bizga qo'ying...
         </div>
         <router-link to="/search" @click="changeLink('un')"
-          >see more</router-link
+          >Barchasi -></router-link
         >
       </div>
     </div>
@@ -58,7 +58,7 @@ const changeLink = (link) => {
           Ro'zg'orga yog' olmasa bo'lmaydi. Bizda bari sifatli va arzon
         </div>
         <router-link to="/search" @click="changeLink('yog\'')"
-          >see more</router-link
+          >Barchasi -></router-link
         >
       </div>
     </div>

@@ -66,6 +66,7 @@ console.log(store.subTotal, "cart");
 }
 
 .product-info {
+  width: 300px;
   height: 100%;
   display: flex;
   flex-wrap: wrap;

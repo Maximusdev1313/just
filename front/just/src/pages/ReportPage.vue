@@ -4,7 +4,7 @@ import { ref, reactive, watch } from "vue";
 // Importing the central store
 import { useCentralStore } from "../stores/centralStore";
 import Table from "../components/Table.vue";
-// import outlaysList from "../components/outlaysList.vue";
+import outlaysList from "../components/outlaysList.vue";
 // Initializing the store
 const store = useCentralStore();
 // Initializing date references
@@ -25,27 +25,57 @@ const all_cost_by_card = ref({});
 const all_cost_by_debt = ref({});
 const all_outlays_for_market = ref(0);
 const all_cost_by_outlays = ref(0);
-
+const orders = ref([]);
 // Function to get items based on date range and filter them by status
 async function getItems() {
   // Fetching filtered items and outlays concurrently using Promise.all
-  filteredItems.value = await store.filterByDateRange(
-    date1.value,
-    date2.value,
-    "sold-products"
-  );
+  [filteredItems.value, outlays.value, orders.value] = await Promise.all([
+    store.filterByDateRange(date1.value, date2.value, "sold-products"),
+    store.filterByDateRange(date1.value, date2.value, "outlays"),
+    store.filterByDateRange(date1.value, date2.value, "orders"),
+  ]);
 
   // Filtering items by status
-  // by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
-  // by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
-  console.log(filteredItems.value, "fil;");
+  by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
+  by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
+  console.log(orders.value, "fil;");
   if (filteredItems.value.length > 0) {
     Object.assign(
       state,
       store.calculateTotalValueAndProfit(filteredItems.value)
     );
   }
+  all_cost_by_card.value =
+    by_card.value.length > 0
+      ? store.calculateTotalValueAndProfit(by_card.value)
+      : {};
+  all_cost_by_debt.value =
+    by_dept.value.length > 0
+      ? store.calculateTotalValueAndProfit(by_dept.value)
+      : {};
+  // Filtering outlays for market
+  const oulays_for_market = store.filterItems(
+    outlays.value,
+    "status",
+    "for_market"
+  );
+  // Function to calculate total outlays
+  const calculateTotalOutlays = (outlays) => {
+    if (!Array.isArray(outlays)) {
+      throw new Error("Invalid input: outlays must be an array");
+    }
+    return outlays.reduce((totalOutlay, item) => {
+      if (typeof item.price !== "number") {
+        throw new Error("Invalid item: price must be a number");
+      }
+      return totalOutlay + item.price;
+    }, 0);
+  };
+  // Calculating total outlays for market and all outlays
+  all_outlays_for_market.value = calculateTotalOutlays(oulays_for_market);
+  all_cost_by_outlays.value = calculateTotalOutlays(outlays.value);
 }
+
 watch([() => date1.value, () => date2.value], () => {
   if (date2.value) {
     getItems();
@@ -83,15 +113,22 @@ watch([() => date1.value, () => date2.value], () => {
             Umumiy foyda:
             {{ state.totalProfit }} so'm
           </div>
-          <!-- <div >
-            Umumiy sotilgan: {{ state.totalValue }} so'm - Karta orqali:
-            {{ all_cost_by_card?.totalValue }} so'm - Xarajatlar:
-            {{ all_cost_by_outlays }} so'm = Sizdagi naqt pul:
+          <div>
+            Umumiy sotilgan: <br />
+            {{ state.totalValue }} so'm - Karta orqali:
+            {{ all_cost_by_card?.totalValue || 0 }} so'm - Xarajatlar:
+            {{ all_cost_by_outlays || 0 }} so'm - Qarzlar:
+            {{ all_cost_by_debt?.totalValue || 0 }} = Sizdagi naqt pul:
             <span>
-              {{ state?.totalValue - all_cost_by_card?.totalValue }}
+              {{
+                (state?.totalValue || 0) -
+                (all_cost_by_card?.totalValue || 0) -
+                (all_cost_by_outlays || 0) -
+                (all_cost_by_debt?.totalValue || 0)
+              }}
               so'm
             </span>
-          </div> -->
+          </div>
         </div>
 
         <div class="">
@@ -101,15 +138,16 @@ watch([() => date1.value, () => date2.value], () => {
           <div class="" v-if="all_cost_by_debt.totalValue">
             Qarz: {{ all_cost_by_debt?.totalValue }} so'm
           </div>
-          <!-- <div class="">Bozorlik uchun: {{ all_outlays_for_market }} so'm</div>
-          <div class="">Xarajatlar: {{ all_cost_by_outlays }} so'm</div> -->
+          <div class="">Bozorlik uchun: {{ all_outlays_for_market }} so'm</div>
+          <div class="">Xarajatlar: {{ all_cost_by_outlays }} so'm</div>
+          <div class="">Online buyurtmalar soni: {{ orders?.length }} ta</div>
         </div>
       </div>
 
       <div class="devider"></div>
 
       <Table :products="filteredItems" :caption="'Umumiy'" />
-      <!-- <Table
+      <Table
         :products="by_card"
         :caption="'Karta orqali'"
         v-if="by_card.length"
@@ -118,8 +156,12 @@ watch([() => date1.value, () => date2.value], () => {
         :products="by_dept"
         :caption="'Qarz orqali'"
         v-if="by_dept.length"
-      /> -->
-      <!-- <outlays-list :outlays="outlays" :caption="'Xarajatlar'" /> -->
+      />
+      <outlays-list
+        :outlays="outlays"
+        :caption="'Xarajatlar'"
+        v-if="outlays.length"
+      />
     </div>
   </div>
 </template>

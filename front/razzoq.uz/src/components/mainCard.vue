@@ -110,4 +110,9 @@ const { products } = toRefs(props);
   vertical-align: middle;
   fill: currentColor;
 }
+@media only screen and (min-width: 768px) {
+  .card {
+    width: 250px;
+  }
+}
 </style>

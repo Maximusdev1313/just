@@ -1,5 +1,6 @@
 // import HelloWorld from './components/HelloWorld.vue'
 import IndexPage from './pages/IndexPage.vue'
+import OrdersPage from './pages/OrdersPage.vue'
 import ReportPage from './pages/ReportPage.vue'
 import AuthPage from './pages/AuthPage.vue'
 import AddProductPage from './pages/AddProduct.vue'
@@ -10,6 +11,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import VueCookies from 'vue-cookies'
 const routes = [
   { path: '/', component: IndexPage },
+  { path: '/orders', component: OrdersPage },
   { path: '/report', component: ReportPage },
   { path: '/auth', component: AuthPage },
   { path: '/addproduct', component: AddProductPage },

@@ -8,22 +8,25 @@ const store = useCentralStore();
 function connect() {
   console.log("connn");
   const channel = pusher.subscribe("my-channel");
-  channel.bind("client-updated", (data) => {
+  channel.bind("my-event", (data) => {
     console.log(data);
+
     updateClient(data);
   });
 }
 
 function updateClient(data) {
   // Find the client in the client array using the client ID
-  let clientIndex = store.client.findIndex((c) => c._id === data._id);
-  console.log("ish");
+  let client = store.client.find((cli) => cli.id == data.id);
+  console.log(data.id, "data");
   // If the client is found, update it
-  if (clientIndex !== -1) {
-    store.client[clientIndex].status = data.status;
-    console.log(store.client[clientIndex]);
+  if (client) {
+    client.status = data.status;
+    console.log(client);
   }
+  console.log(client);
 }
+
 onMounted(() => {
   store.getClientInfo();
   connect();
@@ -44,9 +47,9 @@ onUnmounted(() => {
         <ul v-for="client in store.client" :key="client">
           <h3 class="title">
             {{
-              client.status == "waiting"
+              client?.status == "waiting"
                 ? "Buyurtma berildi"
-                : client.status == "delivering"
+                : client?.status == "delivering"
                 ? "Buyurtmangiz yetkazib berishda"
                 : "Buyurtma yopilgan"
             }}
@@ -61,7 +64,9 @@ onUnmounted(() => {
             <span>Manzil:</span> <span>{{ client.address }}</span>
           </li>
           <div class="devider"></div>
+          <!-- order list  -->
           <order-list :products="client.orders" />
+
           <li class="list subtotal">
             <span>Yetkazib berish:</span> <span>0 so'm</span>
           </li>

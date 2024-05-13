@@ -6,7 +6,7 @@ import { nextTick, onMounted } from 'vue'
 
 export const useCentralStore = defineStore('central', {
     state: () => ({
-        api: 'https://justserv.netlify.app/.netlify/functions/app/api',
+        api: 'http://localhost:8888/.netlify/functions/app/api',
         products: JSON.parse(sessionStorage.getItem("products")) || [],
         cartItems: JSON.parse(localStorage.getItem("cart_items")) || [],
         client: [],
@@ -18,7 +18,7 @@ export const useCentralStore = defineStore('central', {
     }),
     getters: {
         subTotal: state => state.cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
-        lastProducts: state => state.products.slice(-12).reverse(),
+        lastProducts: state => state.products.slice(-18).reverse(),
         flour: state => state.products.filter(product => product.category == 'Un mahsulotlari').reverse(),
         sausage: state => state.products.filter(product => product.category == 'Kolbasa').reverse(),
         oil: state => state.products.filter(product => product.category == "Yog' mahsulotlari").reverse(),

@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserv.netlify.app/.netlify/functions/app/api',
+    api: 'http://localhost:8888/.netlify/functions/app/api',
     items: [],
     itemsForSell: [],
     cartOpen: false,
@@ -22,7 +22,8 @@ export const useCentralStore = defineStore('central', {
     notAdded: JSON.parse(localStorage.getItem('notAdded')) || [],
     notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
     user: VueCookies.get('user') || null,
-    checkItemsForChange: []
+    checkItemsForChange: [],
+    orders: []
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -76,7 +77,18 @@ export const useCentralStore = defineStore('central', {
       // Return only those products whose market name matches with the market name of the current user
       return products.filter((products) => products.market_name === currentUser.market_name);
     },
-
+    async getOrders() {
+      try {
+        const response = await axios.get(`${this.api}/orders`)
+        this.orders = response.data.reverse()
+        console.log(this.orders);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    addOrders(order) {
+      this.orders.unshift(order)
+    },
 
     async postProducts(products, api) {
       // Get the user from cookies

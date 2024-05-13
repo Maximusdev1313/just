@@ -8,9 +8,9 @@ const asyncHandler = require("express-async-handler");
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
-    appId: "1797355",
-    key: "c9c37556d36119edfc7a",
-    secret: "fb3677b9cc9cdb9c66bc",
+    appId: "1801677",
+    key: "5ebb4112c8b3258dbaae",
+    secret: "46ae4500af3450a24b3e",
     cluster: "ap2",
     useTLS: true
 });
@@ -47,7 +47,7 @@ module.exports = class Order {
         try {
             await Client.findByIdAndUpdate(hashed_id, newClient);
             // Trigger a 'client-updated' event with the updated client data
-            pusher.trigger('my-channel', 'my-event', newClient);
+            pusher.trigger('my-channel', 'my-event', { newClient, id });
             res.status(200).json({ message: 'updated successfully lin' });
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -75,8 +75,9 @@ module.exports = class Order {
             // set the value of the _id field to the value of the clientId field
             clientData._id = new mongoose.Types.ObjectId(crypto.createHash('md5').update(clientData.clientId).digest('hex').substring(0, 24))
             console.log(clientData._id);
+            pusher.trigger('my-channel', 'client-created', { clientData });
 
-            await Client.create(clientData);
+            await Client.create([clientData]);
             res.status(201).json({ clientData });
         } catch (error) {
             res.status(400).json({ message: error.message });

@@ -17,12 +17,11 @@ function setId() {
   clientId.value = Date.now() + Math.floor(Math.random() * 10000).toString();
 
   store.clientId.unshift(clientId.value);
-  localStorage.setItem("clientId", JSON.stringify(store.clientId));
 }
 
 const postClientInfo = async () => {
-  setId();
   try {
+    setId();
     const response = await axios.post(`${store.api}/orders`, {
       clientId: clientId.value,
       name: name.value,
@@ -33,9 +32,13 @@ const postClientInfo = async () => {
       location: userLocation.value,
       created: Date.now(),
     });
+    localStorage.setItem("clientId", JSON.stringify(store.clientId));
+
     console.log(response.data);
   } catch (error) {
-    console.log(error.message);
+    alert("Iltimos Internet aloqani tekshiring!");
+    router.push("/");
+    return;
   }
 };
 const postOrders = async () => {
@@ -53,7 +56,8 @@ const postOrders = async () => {
         quantity: product.quantity,
       });
     } catch (error) {
-      console.log(error.message);
+      alert("Iltimos Internet aloqani tekshiring!");
+      return;
     }
   }
 };

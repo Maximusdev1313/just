@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { useCentralStore } from "../stores/centralStore";
+import pusher from "../../pusher";
 
 import searchInputs from "../components/searchInputs.vue";
 import productsForChoosing from "../components/productsForChoosing.vue";
@@ -10,45 +11,96 @@ import clients from "../components/clients.vue";
 import loader from "../components/loader.vue";
 import dialogMenu from "../components/dialogMenu.vue";
 import outlayForm from "../components/inputsForOutlays.vue";
+import sound from "../assets/notification.mp3";
 const store = useCentralStore();
 const isActive = ref(false);
 const isOutlay = ref(false);
-const data = ref(null);
-let reader;
-const connect = async () => {
-  if ("serial" in navigator) {
-    try {
-      const port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600 });
+const newMassage = ref(false);
 
-      reader = port.readable.getReader();
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) {
-          reader.releaseLock();
-          break;
-        }
-        // Assuming the scale returns text data
-        data.value = new TextDecoder().decode(value);
-      }
-    } catch (err) {
-      console.error("There was an error opening the serial port:", err);
-    }
-  } else {
-    console.error("Web Serial API not supported");
+// const isMuted = ref(
+//   sessionStorage.getItem("isMuted") === "true" ? true : false
+// );
+
+const playSound = () => {
+  console.log("run");
+  console.log(sound);
+  const audio = new Audio(sound);
+  audio.play();
+};
+let userHasInteracted = false;
+
+window.addEventListener("click", () => {
+  if (store.orders.length) {
+    userHasInteracted = true;
+    console.log("eter");
+  }
+});
+
+const unmute = () => {
+  if (userHasInteracted) {
+    playSound();
   }
 };
 
-onUnmounted(() => {
-  if (reader) {
-    reader.releaseLock();
-  }
+function connect() {
+  console.log("connn");
+  const clientChannel = pusher.subscribe("my-channel");
+  clientChannel.bind("client-created", (data) => {
+    console.log(data, "data");
+    store.addOrders(data.clientData);
+  });
+}
+
+onMounted(() => {
+  store.getOrders();
+  connect();
 });
-onUnmounted(() => {
-  if (reader) {
-    reader.releaseLock();
+
+watch(
+  () => store.orders.length,
+  function () {
+    if (userHasInteracted && store.orders.length) {
+      unmute();
+      newMassage.value = true;
+    }
+    console.log("watch");
   }
-});
+);
+
+// const connect = async () => {
+//   if ("serial" in navigator) {
+//     try {
+//       const port = await navigator.serial.requestPort();
+//       await port.open({ baudRate: 9600 });
+
+//       reader = port.readable.getReader();
+//       while (true) {
+//         const { value, done } = await reader.read();
+//         if (done) {
+//           reader.releaseLock();
+//           break;
+//         }
+//         // Assuming the scale returns text data
+//         data.value = new TextDecoder().decode(value);
+//       }
+//     } catch (err) {
+//       console.error("There was an error opening the serial port:", err);
+//     }
+//   } else {
+//     console.error("Web Serial API not supported");
+//   }
+// };
+
+// onUnmounted(() => {
+//   if (reader) {
+//     reader.releaseLock();
+//   }
+// });
+// onUnmounted(() => {
+//   if (reader) {
+//     reader.releaseLock();
+//   }
+// });
 
 const postSoldProducts = async () => {
   if (store.productsFromStorage.length) {
@@ -64,15 +116,10 @@ const postSoldProducts = async () => {
     location.reload();
   }
 };
-const filte = () => {
-  const no = store.products.filter((item) => {
-    return !item.entry_price;
-  });
-  console.log(no);
-};
 </script>
 <template>
   <div class="container">
+    {{ store.orders.length }}
     <div class="wrapper">
       <aside class="mode">
         <div class="drawer-wrapper">
@@ -135,7 +182,7 @@ const filte = () => {
     >
       <outlayForm @close="isOutlay = false" />
     </dialog-menu>
-    <button @click="filte()">fil</button>
+
     <footer class="flex between item-center mode">
       <button @click="store.getProductsFromServer()" v-if="!store.loading">
         <i class="fa-solid fa-download"></i> Mahsulot olish
@@ -151,6 +198,12 @@ const filte = () => {
         Hisobot olish
       </button>
       <loader v-else />
+      <router-link to="/orders">
+        <button>
+          <i class="fa-solid fa-box box-icon" v-if="newMassage"></i>
+          Buyurtma
+        </button>
+      </router-link>
       <router-link
         to="/notadded"
         v-if="store.notAdded.length || store.notPatched.length"
@@ -222,5 +275,8 @@ footer {
   bottom: 0;
   left: 0;
   z-index: 3;
+}
+.box-icon {
+  color: red;
 }
 </style>

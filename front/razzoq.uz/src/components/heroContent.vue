@@ -5,6 +5,7 @@
     <div class="contents">
       <div class="sub-content">Razzoq market</div>
       <div class="content">Siz dam oling biz bozorlik qilamiz</div>
+      <p>Razzoq Market - Tezkor, bepul va sifatli yetkazib berish...</p>
       <button type="button">Buyurtma berish</button>
     </div>
   </div>
@@ -30,14 +31,18 @@
 }
 .contents {
   margin-left: 20px;
-
   color: #fff;
+  line-height: 40px;
 }
 .content {
   font-size: 25px;
   width: 60%;
-  padding: 20px 0;
   font-weight: bold;
+}
+p {
+  padding: 0;
+  margin: 0;
+  width: 65%;
 }
 button {
   border: none;
@@ -46,5 +51,18 @@ button {
   background-color: rgb(224, 56, 84);
   color: #fff;
   font-weight: bold;
+}
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    height: 600px;
+  }
+  .contents {
+    margin-left: 80px;
+    width: 80%;
+    line-height: 60px;
+  }
+  .content {
+    font-size: 30px;
+  }
 }
 </style>
