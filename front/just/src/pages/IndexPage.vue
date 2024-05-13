@@ -119,7 +119,6 @@ const postSoldProducts = async () => {
 </script>
 <template>
   <div class="container">
-    {{ store.orders.length }}
     <div class="wrapper">
       <aside class="mode">
         <div class="drawer-wrapper">
