@@ -6,7 +6,7 @@ import { nextTick, onMounted } from 'vue'
 
 export const useCentralStore = defineStore('central', {
     state: () => ({
-        api: 'http://localhost:8888/.netlify/functions/app/api',
+        api: 'https://justserv.netlify.app/.netlify/functions/app/api',
         products: JSON.parse(sessionStorage.getItem("products")) || [],
         cartItems: JSON.parse(localStorage.getItem("cart_items")) || [],
         client: [],
