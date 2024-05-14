@@ -40,6 +40,9 @@ onUnmounted(() => {
 <template>
   <div>
     <!-- Loading -->
+    <div class="title" v-if="!store.clientId.length">
+      Hech narsa mavjud emas!
+    </div>
     <loader v-if="!store.client.length" />
     <div class="wrapper" v-else>
       <div class="title">Buyurtmalar</div>
@@ -81,6 +84,7 @@ onUnmounted(() => {
         <loader v-if="store.isLoading" />
       </div>
     </div>
+
     <div class="spacer"></div>
   </div>
 </template>
@@ -90,6 +94,7 @@ onUnmounted(() => {
   font-weight: bolder;
   text-align: center;
   margin: 10px 0;
+  color: rgb(90, 89, 89);
 }
 ul {
   padding: 10px 10px;
@@ -98,7 +103,7 @@ ul {
 .subtotal {
   font-size: large;
   font-weight: bold;
-  color: rgb(80, 79, 79);
+  color: rgb(31, 109, 29);
   margin-top: 10px;
 }
 .time {

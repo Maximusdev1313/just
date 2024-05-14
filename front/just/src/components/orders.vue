@@ -5,21 +5,35 @@ import axios from "axios";
 const store = useCentralStore();
 const router = useRouter();
 store.getOrders();
-// const patchOrder = async (clientId) => {
-//   try {
-//     const response = await axios.patch(`${store.api}/orders/${clientId}`, {
-//       status: "delivering",
-//     });
-//     console.log(response.data);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-const accept = (client) => {
+const patchOrder = async (clientId) => {
+  console.log(clientId, "iud");
+  try {
+    const response = await axios.patch(
+      `${store.api}/orders/${clientId}`,
+      {
+        status: "delivering",
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const accept = async (client) => {
   store.itemsForSell = [];
   store.itemsForSell = client.orders;
-  // patchOrder(client.id);
+  console.log(client, "client");
+  if (client.status == "waiting") {
+    await patchOrder(client.clientId);
+  }
   router.push("/");
+
   console.log(store.itemsForSell);
 };
 </script>

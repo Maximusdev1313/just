@@ -29,7 +29,8 @@ const { products } = toRefs(props);
       <div class="card__price">{{ item.price }} so'm</div>
 
       <div class="add-button">
-        <button class="button" @click="store.addProductToCart(item)">
+        <div class="button text" v-if="item.status == 'no'">Mavjud emas...</div>
+        <button class="button" @click="store.addProductToCart(item)" v-else>
           {{ item.quantity > 0 ? item.quantity : "" }}
           <i class="fa-solid fa-cart-shopping icon"></i>
         </button>
@@ -109,6 +110,12 @@ const { products } = toRefs(props);
   padding-right: 5px;
   vertical-align: middle;
   fill: currentColor;
+}
+.text {
+  font-size: small;
+  text-align: center;
+  background-color: grey;
+  padding: 0 !important;
 }
 @media only screen and (min-width: 768px) {
   .card {

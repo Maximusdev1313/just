@@ -19,7 +19,8 @@ export const useCentralStore = defineStore('central', {
     getters: {
         subTotal: state => state.cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
         lastProducts: state => state.products.slice(-18).reverse(),
-        flour: state => state.products.filter(product => product.category == 'Un mahsulotlari').reverse(),
+        flour: state => state.products.filter(product => product.category && typeof product.category === 'string' ? product.category.toLowerCase() == 'un mahsulotlari' : false).reverse(),
+
         sausage: state => state.products.filter(product => product.category == 'Kolbasa').reverse(),
         oil: state => state.products.filter(product => product.category == "Yog' mahsulotlari").reverse(),
         water: state => state.products.filter(product => product.category == 'Suvlar').reverse(),
@@ -59,6 +60,7 @@ export const useCentralStore = defineStore('central', {
             if (lastProduct) {
                 lastProduct.quantity = product.quantity;
             }
+            console.log(this.cartItems);
             localStorage.setItem("cart_items", JSON.stringify(this.cartItems));
         },
         removeProduct(product) {
@@ -76,19 +78,29 @@ export const useCentralStore = defineStore('central', {
         },
         async getClientInfo() {
             this.isLoading = true
+            let index = 0
             for (let client of this.clientId) {
                 console.log(client);
                 try {
                     let res = await axios.get(this.api + '/orders/' + client)
-                    this.client.push(res.data)
+                    if (res.data) {
+
+                        this.client.push(res.data)
+                    }
+                    else {
+                        this.clientId.splice(index, 1)
+                        localStorage.setItem('clientId', JSON.stringify(this.clientId))
+                    }
                     console.log(this.client[0]);
 
                 }
                 catch (err) {
                     this.isLoading = false
                 }
+                index++
             }
             this.isLoading = false
+            console.log(this.isLoading);
         },
         searchProducts(name) {
             this.filteredItem = this.products.filter(product => {

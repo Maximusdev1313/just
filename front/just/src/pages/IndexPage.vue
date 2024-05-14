@@ -42,30 +42,41 @@ const unmute = () => {
   }
 };
 
-function connect() {
+async function connect() {
   console.log("connn");
-  const clientChannel = pusher.subscribe("my-channel");
-  clientChannel.bind("my-event", (data) => {
-    console.log(data, "data");
-    store.addOrders(data.clientData);
-  });
+  // const clientChannel = pusher.subscribe("my-channel");
+  // clientChannel.bind("my-event", (data) => {
+  //   console.log(data, "data");
+  //   store.addOrders(data.clientData);
+  // });
+
+  await store.getOrders();
+  const filteredItem = store.orders.filter((item) => item.status == "waiting");
+  console.log(filteredItem);
+  if (filteredItem.length) {
+    unmute();
+    newMassage.value = true;
+  }
 }
 
 onMounted(() => {
-  store.getOrders();
   connect();
 });
 
-watch(
-  () => store.orders.length,
-  function () {
-    if (userHasInteracted && store.orders.length) {
-      unmute();
-      newMassage.value = true;
-    }
-    console.log("watch");
-  }
-);
+setInterval(() => {
+  connect();
+}, 20000);
+
+// watch(
+//   () => store.orders.length,
+//   function () {
+//     if (userHasInteracted && store.orders.length) {
+//       unmute();
+//       newMassage.value = true;
+//     }
+//     console.log("watch");
+//   }
+// );
 
 // const connect = async () => {
 //   if ("serial" in navigator) {

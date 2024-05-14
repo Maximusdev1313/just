@@ -1,7 +1,15 @@
 <script setup>
+import { watchEffect } from "vue";
 import { useCentralStore } from "../stores/sentralStore";
 const store = useCentralStore();
 console.log(store.subTotal, "cart");
+watchEffect(() => {
+  for (let product of store.cartItems) {
+    if (product.quantity < 0) {
+      product.quantity = 0;
+    }
+  }
+});
 </script>
 
 <template>

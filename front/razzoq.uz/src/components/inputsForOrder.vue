@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, reactive, computed } from "vue";
 import { useCentralStore } from "../stores/sentralStore";
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -11,7 +11,14 @@ const address = ref("");
 const comment = ref("");
 const clientId = [];
 const userLocation = ref(null);
-const isLoading = ref(false);
+
+const state = reactive({
+  name: "",
+  address: "",
+  phoneNumber: "",
+  isLoading: false,
+  errors: [],
+});
 
 function setId() {
   clientId.value = Date.now() + Math.floor(Math.random() * 10000).toString();
@@ -24,9 +31,9 @@ const postClientInfo = async () => {
     setId();
     const response = await axios.post(`${store.api}/orders`, {
       clientId: clientId.value,
-      name: name.value,
-      phone_number: phoneNumber.value,
-      address: address.value,
+      name: state.name,
+      phone_number: state.phoneNumber,
+      address: state.address,
       total_order_price: store.subTotal,
       comment: comment.value,
       location: userLocation.value,
@@ -97,13 +104,23 @@ async function callLocation() {
     // handle error
   }
 }
+
+const validateInputs = () => {
+  state.errors = [];
+  if (!state.name) state.errors.push("Ismingizni kiriting");
+  if (!state.phoneNumber.match(/^\d{2}\d{3}\d{2}\d{2}$/))
+    state.errors.push("Telefon raqam formati noto'g'ri: ** *** ** **");
+  if (!state.address) state.errors.push("Manzilni kiriting");
+};
+
 const sendOrder = async () => {
-  if (!isLoading.value) {
-    isLoading.value = true;
+  validateInputs();
+  if (state.errors.length === 0 && !state.isLoading) {
+    state.isLoading = true;
     await callLocation();
     await postClientInfo();
     await postOrders();
-    isLoading.value = false;
+    state.isLoading = false;
     localStorage.removeItem("cart_items");
     store.cartItems = [];
     store.products = [];
@@ -120,22 +137,25 @@ const sendOrder = async () => {
         type="text"
         name="name"
         id="name"
-        v-model="name"
+        v-model="state.name"
         placeholder="Ismingiz"
+        :class="!name && state.errors.length ? 'alert' : ''"
       />
       <input
         type="tel"
         name="phoneNumber"
         id="phoneNumber"
-        v-model="phoneNumber"
-        placeholder="Raqamigiz"
+        v-model="state.phoneNumber"
+        placeholder="Raqamigiz: 99 999 99 99"
+        :class="!phoneNumber && state.errors.length ? 'alert' : ''"
       />
       <input
         type="text"
         name="address"
         id="address"
-        v-model="address"
+        v-model="state.address"
         placeholder="Manzil"
+        :class="!state.address && state.errors.length ? 'alert' : ''"
       />
       <textarea
         name="comment"
@@ -149,11 +169,14 @@ const sendOrder = async () => {
         type="button"
         class="button"
         @click="sendOrder"
-        :class="isLoading ? 'disable' : ''"
+        :class="state.isLoading ? 'disable' : ''"
       >
-        <i class="fa-solid fa-spinner fa-spin-pulse" v-if="isLoading"></i>
+        <i class="fa-solid fa-spinner fa-spin-pulse" v-if="state.isLoading"></i>
         Buyurtma berish
       </button>
+      <div class="errors" v-for="error in state.errors" :key="error">
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
@@ -202,5 +225,13 @@ button:focus {
 .disable {
   background-color: #828181;
   cursor: not-allowed;
+}
+.alert::placeholder {
+  color: red;
+}
+.errors {
+  width: 80%;
+  text-align: left;
+  color: red;
 }
 </style>
