@@ -11,6 +11,7 @@ export const useCentralStore = defineStore('central', {
         cartItems: JSON.parse(localStorage.getItem("cart_items")) || [],
         client: [],
         clientId: JSON.parse(localStorage.getItem("clientId")) || [],
+        favourites: JSON.parse(localStorage.getItem("favourites")) || [],
         changed: '',
         filteredItem: [],
         searchName: '',
@@ -110,6 +111,30 @@ export const useCentralStore = defineStore('central', {
             this.filteredItem = this.filteredItem.slice(-10)
             console.log(this.filteredItem)
 
+        },
+        addToFavourites(product) {
+            let existingProduct = this.checkIsFavourite(product)
+            if (!existingProduct) {
+                // if the product exists, update the quantity
+                this.favourites.unshift(product)
+                console.log(this.favourites);
+                localStorage.setItem('favourites', JSON.stringify(this.favourites))
+            } else {
+                // find the index of the product and remove
+                const index = this.favourites.indexOf(product);
+                if (index > -1) {
+                    this.favourites.splice(index, 1);
+                    localStorage.setItem('favourites', JSON.stringify(this.favourites))
+
+                }
+            }
+
+        },
+        checkIsFavourite(product) {
+            let existingProduct = this.favourites.find(item => item._id === product._id);
+            if (existingProduct) {
+                return true
+            }
         }
 
 

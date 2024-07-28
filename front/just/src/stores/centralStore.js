@@ -197,6 +197,10 @@ export const useCentralStore = defineStore('central', {
 
       // Loop through each product in the products array
       products.forEach(product => {
+        if (!product.price || !product.quantity || !product.entry_price) {
+          console.log(product, 'error');
+          return;
+        }
         // Calculate the value of the product as price times quantity
         let value = product.price * product.quantity;
 

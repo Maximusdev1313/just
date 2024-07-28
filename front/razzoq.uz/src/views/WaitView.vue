@@ -47,7 +47,7 @@ onUnmounted(() => {
     <div class="wrapper" v-else>
       <div class="title">Buyurtmalar</div>
       <div class="wrapper">
-        <ul v-for="client in store.client" :key="client">
+        <ul v-for="client in store.client" :key="client.id">
           <h3 class="title">
             {{
               client?.status == "waiting"

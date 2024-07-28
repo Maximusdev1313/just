@@ -20,7 +20,7 @@ const store = useCentralStore();
         </div>
       </div>
     </router-link>
-    <router-link to="/about" active-class="active" class="nav-link">
+    <router-link to="/favourites" active-class="active" class="nav-link">
       <div class="round">
         <div class="round2">
           <i class="fa-solid fa-heart fa-xl"></i>

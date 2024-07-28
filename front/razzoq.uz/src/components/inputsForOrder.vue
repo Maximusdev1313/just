@@ -174,7 +174,7 @@ const sendOrder = async () => {
         <i class="fa-solid fa-spinner fa-spin-pulse" v-if="state.isLoading"></i>
         Buyurtma berish
       </button>
-      <div class="errors" v-for="error in state.errors" :key="error">
+      <div class="errors" v-for="error in state.errors" :key="error.id">
         {{ error }}
       </div>
     </div>

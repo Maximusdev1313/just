@@ -14,7 +14,7 @@ watchEffect(() => {
 
 <template>
   <div class="container">
-    <div class="product" v-for="product in store.cartItems" :key="product">
+    <div class="product" v-for="product in store.cartItems" :key="product.id">
       <div class="cart-image" v-if="product.img">
         <img
           src="https://www.freeiconspng.com/thumbs/coca-cola-png/bottle-coca-cola-png-transparent-2.png"

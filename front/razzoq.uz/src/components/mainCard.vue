@@ -13,19 +13,27 @@ const { products } = toRefs(props);
 
 <template>
   <div class="wrapper">
-    <div class="card" v-for="item of products" :key="item">
-      <div class="card__image" v-if="item.img">
+    <div class="card" v-for="item of products" :key="item.id">
+      <div class="card__image" @dblclick="store.addToFavourites(item)">
+        <div class="card__heart">
+          <i
+            class="fa-heart fa-xl"
+            style="color: rgb(66, 148, 66)"
+            :class="store.checkIsFavourite(item) ? 'fa-solid' : 'fa-regular'"
+            @click="store.addToFavourites(item)"
+          ></i>
+        </div>
         <img
           src="https://www.freeiconspng.com/thumbs/coca-cola-png/bottle-coca-cola-png-transparent-2.png"
           alt="image"
           class="image"
+          v-if="item.img"
         />
+        <img src="../assets/cart.png" alt="image" class="image" v-else />
       </div>
-      <div class="card__image" v-else>
-        <img src="../assets/cart.png" alt="image" class="image" />
-      </div>
+
       <div class="card__category">{{ item.category }}</div>
-      <div class="card__title">{{ item.name.toUpperCase() }}</div>
+      <div class="card__title">{{ item.name }}</div>
       <div class="card__price">{{ item.price }} so'm</div>
 
       <div class="add-button">
@@ -41,8 +49,6 @@ const { products } = toRefs(props);
 
 <style scoped>
 .wrapper {
-  width: 85%;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -54,12 +60,14 @@ const { products } = toRefs(props);
   background-color: rgb(255, 255, 255);
   margin-bottom: 40px;
   line-height: 27px;
+  transition: 2s;
 }
 .card__image {
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   background-color: rgba(179, 196, 203, 0.365);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -83,6 +91,7 @@ const { products } = toRefs(props);
   text-overflow: ellipsis;
   font-weight: 600;
   color: rgb(78, 78, 79);
+  text-transform: capitalize;
 }
 .card__price {
   font-weight: bold;
@@ -116,6 +125,11 @@ const { products } = toRefs(props);
   text-align: center;
   background-color: grey;
   padding: 0 !important;
+}
+.card__heart {
+  width: 80%;
+  display: flex;
+  justify-content: end;
 }
 @media only screen and (min-width: 768px) {
   .card {

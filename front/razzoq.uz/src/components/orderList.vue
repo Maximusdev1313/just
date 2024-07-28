@@ -14,7 +14,7 @@ const { products } = toRefs(props);
 
 <template>
   <div>
-    <li class="list" v-for="product in products" :key="product">
+    <li class="list" v-for="product in products" :key="product.id">
       <span
         ><span class="name">{{ product.name }} </span> x
         {{ product.quantity }}</span
