@@ -201,7 +201,7 @@ input{
   align-items: center;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #000000;
     background-color: #ffffff;
@@ -247,7 +247,7 @@ input{
     background-color: #5a5a5c;
   }
 
-}
+} */
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   /* Add your CSS here */
