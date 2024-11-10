@@ -46,7 +46,7 @@ const login = async () => {
         placeholder="Ismingiz"
         v-model="owner_name"
       />
-      <input type="text" id="password" placeholder="Parol" v-model="password" />
+      <input type="text" id="password" placeholder="Parol" v-model="password" v-on:keyup.enter="login"/>
       <button @click="login">Kirish</button>
     </div>
   </div>
