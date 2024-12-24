@@ -95,6 +95,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 input {
+color: #fff;
   margin: 0 10px;
   height: 30px;
   background-color: transparent;
