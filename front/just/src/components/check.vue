@@ -128,7 +128,7 @@ const changeCheck = (order) => {
   border: 1px solid #000000;
   padding: 10px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
 }
 .item {
   border-bottom: 1px dotted #000;
