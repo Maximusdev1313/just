@@ -34,7 +34,7 @@ const printElement = (elementId) => {
   const originalContent = document.body.innerHTML;
 
   // Include the styles in the print content
-  document.body.innerHTML = stylesHtml + printContent;
+  document.body.innerHTML =  printContent;
 
   window.print();
 
