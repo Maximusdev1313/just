@@ -73,7 +73,7 @@ const changeLink = (link) => {
   border-radius: 15px;
   padding: 10px 15px;
   box-sizing: border-box;
-  text-transform: capitalize;
+  text-transform: uppercase;
   margin-top: 30px;
   transition: 1s;
   line-height: 30px;
