@@ -33,7 +33,7 @@ export const useCentralStore = defineStore('central', {
             try {
                 const response = await axios.get(this.api + '/products')
                 this.products = response.data
-                this.products = this.filterItems(this.products, 'market_name', 'Uchar market')
+                this.products = this.filterItems(this.products, 'market_name', 'Razzoq market')
                 sessionStorage.setItem("products", JSON.stringify(this.products))
                 console.log(this.products);
             } catch (error) {
