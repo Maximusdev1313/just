@@ -158,4 +158,14 @@ button {
 .red {
   color: red;
 }
+@media print {
+  .list {
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .red {
+    color: black !important;
+  }
+}
 </style>
