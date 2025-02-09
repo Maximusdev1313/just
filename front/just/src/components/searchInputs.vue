@@ -47,9 +47,6 @@ const filterAndClear = () => {
     <div class="flex col wrapper">
       <input
         type="text"
-        name="name"
-        id=""
-        label="name"
         placeholder="Nomi bo'yicha"
         ref="inputRef"
         v-model="name"
@@ -58,8 +55,6 @@ const filterAndClear = () => {
       />
       <input
         type="text"
-        name="bar_code"
-        id=""
         label="bar_code"
         placeholder="Bar code"
         class="input mt-md"
