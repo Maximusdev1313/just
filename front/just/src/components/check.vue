@@ -1,4 +1,4 @@
-script
+
 <script setup>
 import { computed, toRefs, ref } from "vue";
 import { useCentralStore } from "../stores/centralStore";
