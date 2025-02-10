@@ -55,7 +55,7 @@ const changeCheck = (order) => {
     <div
       :id="`printElement${index}`"
       style="width: 80%"
-      class="mt-md"
+      class="mt-md check"
       @dblclick="changeCheck(orders)"
     >
       <div class="list">
@@ -69,7 +69,7 @@ const changeCheck = (order) => {
         </div>
         <div class="title logo">{{ store.user.market_name }}</div>
 
-        <div class="wrapper">
+        <div class="wrapper items">
           <div
             class="item flex justify-between items-center no-wrap"
             :class="order.status == 'changed' ? 'red' : ''"
@@ -93,6 +93,10 @@ const changeCheck = (order) => {
             <span>Umumiy: {{ grandToTalSum }} so'm</span>
           </div>
         </div>
+        <div class="qr-code">
+
+          <img src="../assets/qr-code.svg" alt="qr-code" width="200" height="200" >
+        </div>
 
         <div class="subtitle text-black text-center mt-md q-my-sm">
           Xizmatimizdan foydalanganingiz uchun rahmat!
@@ -106,11 +110,15 @@ const changeCheck = (order) => {
       type="button"
       class="mb-md enable"
     >
-      print
+      Chop etish
     </button>
   </div>
 </template>
 <style scoped>
+.check{
+  width: 80%;
+}
+
 .date {
   width: 100%;
   margin: 5px;
@@ -127,7 +135,7 @@ const changeCheck = (order) => {
 .list {
   border: 1px solid #000000;
   padding: 10px;
-  font-size: 14px;
+  font-size: medium;
   font-weight: normal;
  
 }
@@ -158,14 +166,49 @@ button {
 .red {
   color: red;
 }
+.qr-code{
+  display: none;
+}
+.subtitle{
+  display: none;
+}
+.tel{
+  display: none;
+}
 @media print {
+  .logo{
+    font-size: 24px;
+    font-weight: bolder;
+  }
   .list {
     color: black !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  font-size: 20px;
+    font-weight: bold;
+  }
+  .items>*{
+    margin-top: 20px;
   }
   .red {
     color: black !important;
+  }
+  .list>*{
+  padding: 10px 0;
+
+}
+  .qr-code{
+    width: 100%;
+    display: flex;
+    margin: 20px 0;
+    justify-content: center;
+    align-items: center;
+  }
+  .tel{
+    margin-bottom: 20px;
+  }
+  .tel,.subtitle{
+    display: block;
   }
 }
 </style>
