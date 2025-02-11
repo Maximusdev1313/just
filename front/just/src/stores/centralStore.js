@@ -166,7 +166,11 @@ export const useCentralStore = defineStore('central', {
       // Fetch the report from the server using the special API
 
       const report = await this.getReport(specialApi);
+      console.log(report, 'report');
+      
       const items = this.filterProductsByMarketName(report, this.user)
+      console.log(items, 'items');
+      
       // Create a new Date object for the start date and set the time to the start of the day
       let start = new Date(startDate);
       start.setHours(0, 0, 0, 0);

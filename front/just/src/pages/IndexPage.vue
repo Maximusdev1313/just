@@ -1,7 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted} from "vue";
 import { useCentralStore } from "../stores/centralStore";
-import pusher from "../../pusher";
 
 import searchInputs from "../components/searchInputs.vue";
 import productsForChoosing from "../components/productsForChoosing.vue";

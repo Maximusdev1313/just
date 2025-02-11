@@ -5,11 +5,13 @@ import { ref, reactive, watch } from "vue";
 import { useCentralStore } from "../stores/centralStore";
 import Table from "../components/Table.vue";
 import outlaysList from "../components/outlaysList.vue";
+import loader from "../components/loader.vue";
 // Initializing the store
 const store = useCentralStore();
 // Initializing date references
 const date1 = ref("");
 const date2 = ref("");
+let isLoading = ref(false);
 
 // Initializing reactive variables
 const state = reactive({
@@ -28,7 +30,9 @@ const all_cost_by_outlays = ref(0);
 const orders = ref([]);
 // Function to get items based on date range and filter them by status
 async function getItems() {
-  // Fetching filtered items and outlays concurrently using Promise.all
+  isLoading.value = true
+  try{
+    // Fetching filtered items and outlays concurrently using Promise.all
   [filteredItems.value, outlays.value, orders.value] = await Promise.all([
     store.filterByDateRange(date1.value, date2.value, "sold-products"),
     store.filterByDateRange(date1.value, date2.value, "outlays"),
@@ -74,6 +78,20 @@ async function getItems() {
   // Calculating total outlays for market and all outlays
   all_outlays_for_market.value = calculateTotalOutlays(oulays_for_market);
   all_cost_by_outlays.value = calculateTotalOutlays(outlays.value);
+  
+  }
+  catch(error){
+    isLoading.value = false
+    console.log('Error from calculating: ',error);
+    if(confirm("Yangilash")){
+      window.location.reload()
+    }
+    
+  }
+  finally{
+    isLoading.value = false
+  }
+  
 }
 
 watch([() => date1.value, () => date2.value], () => {
@@ -81,10 +99,11 @@ watch([() => date1.value, () => date2.value], () => {
     getItems();
   }
 });
+
 </script>
 
 <template>
-  <div class="flex col item-center">
+  <div class="flex col item-center" >
     <div class="title">
       {{ store.user.market_name.toUpperCase() }}
     </div>
@@ -101,9 +120,9 @@ watch([() => date1.value, () => date2.value], () => {
     </div>
     <div class="devider"></div>
 
-    <div class="info mt-xl" v-if="filteredItems.length">
-      <div class="informations flex between">
-        <div class="total-values">
+    <div class="info mt-xl" v-if="filteredItems.length && !isLoading">
+        <div class="informations flex between">
+          <div class="total-values" v-if="state.totalValue">
           <div class="">Umumiy sotilgan: {{ state.totalValue }} so'm</div>
           <div class="">
             Umumiy kelgan narxi:
@@ -162,6 +181,15 @@ watch([() => date1.value, () => date2.value], () => {
         :caption="'Xarajatlar'"
         v-if="outlays.length"
       />
+    </div>
+    <loader v-else-if="isLoading" />
+    <div class="error flex  col item-center" v-else> 
+      <div class="mb-md">
+
+        Xatolik iltimos yangilang!
+      </div>
+      <button type="button" class="btn" @click="reloadPage()">Yangilash</button>
+
     </div>
   </div>
 </template>

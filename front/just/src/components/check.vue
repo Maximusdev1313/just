@@ -76,6 +76,8 @@ const changeCheck = (order) => {
             v-for="order in orders"
             :key="order"
           >
+        
+
             <div class="item-name">{{ order.name }}</div>
             <div class="item-counts">
               <div class="item-quantity">
@@ -88,6 +90,13 @@ const changeCheck = (order) => {
                 {{ order.quantity * order.price }} so'm
               </div>
             </div>
+          </div>
+          <div class="paid_type">To'lov turi: 
+            {{ 
+            orders[0].status == 'cash' ? 'Naqt' : 
+            orders[0].status == 'by_card' ? 'Karta orqali' : 
+            orders[0].status == 'dept' ? 'Qarz' : ''
+           }}
           </div>
           <div class="total flex justify-around mt-md">
             <span>Umumiy: {{ grandToTalSum }} so'm</span>
@@ -174,6 +183,10 @@ button {
 }
 .tel{
   display: none;
+}
+.paid_type{
+  width: 100%;
+
 }
 @media print {
   .logo{

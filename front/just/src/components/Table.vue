@@ -51,7 +51,7 @@ const patchProducts = async (product) => {
         size: product.size,
         quantity_in_store: product.quantity_in_store,
         quantity: product.quantity,
-        store_name: store.user.store_name, // add this line
+        store_name: store.user.store_name, 
         created: product.created,
       }
     );
@@ -126,7 +126,7 @@ const patchProducts = async (product) => {
 <style scoped>
 .wrapper {
   margin-top: 50px;
-  max-height: 40vh;
+  max-height: 70vh;
   overflow: auto;
 }
 table,

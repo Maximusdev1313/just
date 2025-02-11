@@ -1,6 +1,5 @@
 <script setup>
-import { useCentralStore } from "../stores/centralStore";
-const store = useCentralStore();
+
 </script>
 
 <template>
