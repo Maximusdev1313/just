@@ -177,10 +177,9 @@ const changeCheck = (order) => {
   padding: 10px;
   font-size: medium;
   font-weight: normal;
- 
 }
 .item {
-  border-bottom: 1px dotted #000;
+  border-bottom: 1px solid #000;
 }
 .item-name {
   max-width: 40%;
