@@ -240,6 +240,8 @@ export const useCentralStore = defineStore('central', {
       if(filteredItem.length === 1){
         
         this.addToCart(filteredItem[0])
+        this.items = []
+        
         this.cartOpen=false
       }else if(filteredItem.length>1){
         this.items = filteredItem.slice(-30)
@@ -247,6 +249,7 @@ export const useCentralStore = defineStore('central', {
         this.cartOpen = true
       }
       else{
+        this.items = []
         this.cartOpen=true
       }
       if(name.startsWith('rqt')){
