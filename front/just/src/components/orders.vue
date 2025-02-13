@@ -28,6 +28,9 @@ const patchOrder = async (clientId) => {
 const accept = async (client) => {
   store.itemsForSell = [];
   store.itemsForSell = client.orders;
+  store.clientName = client.name
+  store.clientNumber = client.phone_number
+  store.clientAddress= client.address
   console.log(client, "client");
   if (client.status == "waiting") {
     await patchOrder(client.clientId);

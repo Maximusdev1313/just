@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted} from "vue";
 import { useCentralStore } from "../stores/centralStore";
+import vioceRecognition from "../components/vioceRecognition.vue";
 
 import searchInputs from "../components/searchInputs.vue";
 import productsForChoosing from "../components/productsForChoosing.vue";
@@ -42,7 +43,6 @@ const unmute = () => {
 };
 
 async function connect() {
-  console.log("connn");
   // const clientChannel = pusher.subscribe("my-channel");
   // clientChannel.bind("my-event", (data) => {
   //   console.log(data, "data");
@@ -51,7 +51,6 @@ async function connect() {
 
   await store.getOrders();
   const filteredItem = store.orders.filter((item) => item.status == "waiting");
-  console.log(filteredItem);
   if (filteredItem.length) {
     unmute();
     newMassage.value = true;
@@ -134,6 +133,7 @@ const postSoldProducts = async () => {
         <div class="drawer-wrapper">
           <div class="drawer">
             <div class="content">
+
               <button
                 @click="store.addClient(clients.length)"
                 class="button"
@@ -159,6 +159,7 @@ const postSoldProducts = async () => {
       </aside>
       <div class="functional-section">
         <div class="search-inputs">
+          <vioce-recognition/>
           <searchInputs />
 
           <productsForChoosing v-if="store.cartOpen" />

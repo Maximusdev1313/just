@@ -23,7 +23,10 @@ export const useCentralStore = defineStore('central', {
     notPatched: JSON.parse(localStorage.getItem('notPatched')) || [],
     user: VueCookies.get('user') || null,
     checkItemsForChange: [],
-    orders: []
+    orders: [],
+    clientName: '',
+    clientNumber: '',
+    clientAddress:''
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -81,7 +84,7 @@ export const useCentralStore = defineStore('central', {
       try {
         const response = await axios.get(`${this.api}/orders`)
         this.orders = response.data.reverse()
-        console.log(this.orders);
+       
       } catch (error) {
         console.log(error);
       }
@@ -229,10 +232,29 @@ export const useCentralStore = defineStore('central', {
       this.count++
     },
     filterProductsByName(name) {
+      console.log(name);
+      
       const filteredItem = this.products.filter(item => item.name.toLowerCase().includes(name.toLowerCase()));
-      this.items = filteredItem.slice(-30)
-
-      this.cartOpen = true
+      console.log(filteredItem.length);
+      
+      if(filteredItem.length === 1){
+        
+        this.addToCart(filteredItem[0])
+        this.cartOpen=false
+      }else if(filteredItem.length>1){
+        this.items = filteredItem.slice(-30)
+        console.log(this.items);
+        this.cartOpen = true
+      }
+      else{
+        this.cartOpen=true
+      }
+      if(name.startsWith('rqt')){
+        this.clientName = prompt("Mijoz ismini kiriting", "ali")
+        this.clientNumber = prompt("Mijoz raqamini kiriting", "99 999 99 99")
+        this.clientAddress = prompt("Mijoz manzilini kiriting", "Damko'l, hosil ko'cha 16-uy")
+      }
+      
     },
     filterProductsByCode(code) {
       this.items = this.products.filter(item => item.bar_code == code);
@@ -375,6 +397,10 @@ export const useCentralStore = defineStore('central', {
         this.itemsForSell.forEach(product => {
           product.totalSum = product.price * product.quantity;
           product.status = status
+          product.clientName = this.clientName
+          product.clientNumber = this.clientNumber
+          product.clientAddress = this.clientAddress
+          product.salesman = this.user.name
           console.log(product);
         });
 
@@ -389,7 +415,9 @@ export const useCentralStore = defineStore('central', {
 
         // Clear the items for sell
         this.itemsForSell = []
-
+        this.clientName = ''
+        this.clientAddress=''
+        this.clientNumber = ''
 
       }
     },

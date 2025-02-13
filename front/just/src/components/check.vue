@@ -61,7 +61,7 @@ const changeCheck = (order) => {
       <div class="list">
         <div class="date">
           <span>
-            {{ store.user.name }}
+            {{ orders[0]?.salesman }}
           </span>
           <span>
             {{ store.formatHours(orders[0]?.created) }}
@@ -76,8 +76,6 @@ const changeCheck = (order) => {
             v-for="order in orders"
             :key="order"
           >
-        
-
             <div class="item-name">{{ order.name }}</div>
             <div class="item-counts">
               <div class="item-quantity">
@@ -91,15 +89,44 @@ const changeCheck = (order) => {
               </div>
             </div>
           </div>
-          <div class="paid_type">To'lov turi: 
-            {{ 
+          <div class="w-100 flex around mt-md">
+              <span>
+              Umumiy:
+            </span>
+            <span>
+              {{ grandToTalSum }} so'm
+            </span>
+          </div>
+          <div class="w-100 flex item-center justify-center">
+
+            ****************************
+          </div>
+          <div class="total  mt-md">
+            <div class="paid_type flex between">To'lov turi: <div>
+
+              {{ 
             orders[0].status == 'cash' ? 'Naqt' : 
             orders[0].status == 'by_card' ? 'Karta orqali' : 
             orders[0].status == 'dept' ? 'Qarz' : ''
-           }}
+          }}
           </div>
-          <div class="total flex justify-around mt-md">
-            <span>Umumiy: {{ grandToTalSum }} so'm</span>
+          </div>
+            
+          <div class="" v-if="orders[0]?.clientName">
+
+            <div class="w-100 flex between  " >
+              <span>Mijoz ismi: </span>
+              <span>{{ orders[0]?.clientName }}</span>
+            </div>
+            <div class="w-100 flex between">
+              <span>Mijoz raqami: </span>
+              <span>{{ orders[0]?.clientNumber}}</span>
+            </div>
+            <div class="w-100 flex between wrap">
+              <span>Manzil: </span> 
+              <span> {{ orders[0]?.clientAddress}}</span>
+            </div>
+          </div>
           </div>
         </div>
         <div class="qr-code">
@@ -111,7 +138,7 @@ const changeCheck = (order) => {
           Xizmatimizdan foydalanganingiz uchun rahmat!
         </div>
         <div class="tel mt-md">Tel: {{ store.user.phone_number }}</div>
-        <!-- <div class="">Saytimiz: razzoq.uz</div> -->
+        <div class="">Saytimiz: razzoq.uz</div>
       </div>
     </div>
     <button
@@ -194,10 +221,12 @@ button {
     font-weight: bolder;
   }
   .list {
+    border: none;
+    border-bottom: 3px solid #000;
     color: black !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  font-size: 20px;
+    font-size: 20px;
     font-weight: bold;
   }
   .items>*{
@@ -217,9 +246,9 @@ button {
     justify-content: center;
     align-items: center;
   }
-  .tel{
+  /* .tel{
     margin-bottom: 20px;
-  }
+  } */
   .tel,.subtitle{
     display: block;
   }
