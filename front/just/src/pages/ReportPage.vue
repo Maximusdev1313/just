@@ -12,7 +12,6 @@ const store = useCentralStore();
 const date1 = ref("");
 const date2 = ref("");
 let isLoading = ref(false);
-
 // Initializing reactive variables
 const state = reactive({
   totalValue: 0,
@@ -183,14 +182,7 @@ watch([() => date1.value, () => date2.value], () => {
       />
     </div>
     <loader v-else-if="isLoading" />
-    <div class="error flex  col item-center" v-else> 
-      <div class="mb-md">
-
-        Xatolik iltimos yangilang!
-      </div>
-      <button type="button" class="btn" @click="reloadPage()">Yangilash</button>
-
-    </div>
+    
   </div>
 </template>
 <style scoped>

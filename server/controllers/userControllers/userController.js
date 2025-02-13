@@ -1,14 +1,7 @@
 const User = require('../../models/users/user');
 const bcrypt = require('bcryptjs');
 
-exports.getUser = async (req, res) => {
-    try {
-        const user = await User.find()
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(404).json({ message: 'not found' })
-    }
-}
+
 
 exports.register = async (req, res) => {
     try {
@@ -50,6 +43,7 @@ exports.login = async (req, res) => {
             phone_number: user.phone_number,
             market_name: user.market_name,
             password: user.password,
+            address: user.address,
             role: user.role,
             money: user.money,
             is_active: user.is_active,

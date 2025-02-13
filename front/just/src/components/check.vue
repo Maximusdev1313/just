@@ -129,6 +129,9 @@ const changeCheck = (order) => {
           </div>
           </div>
         </div>
+        <div class="w-100 flex item-center justify-center">
+          ****************************
+        </div>
         <div class="qr-code">
 
           <img src="../assets/qr-code.svg" alt="qr-code" width="200" height="200" >
@@ -138,6 +141,7 @@ const changeCheck = (order) => {
           Xizmatimizdan foydalanganingiz uchun rahmat!
         </div>
         <div class="tel mt-md">Tel: {{ store.user.phone_number }}</div>
+        <div class="tel mt-md">Manzilimiz: {{ store.user?.address }}</div>
         <div class="">Saytimiz: razzoq.uz</div>
       </div>
     </div>
