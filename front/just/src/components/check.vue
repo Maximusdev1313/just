@@ -180,6 +180,7 @@ const changeCheck = (order) => {
 }
 .item {
   border-bottom: 1px solid #000;
+  
 }
 .item-name {
   max-width: 40%;
