@@ -45,6 +45,14 @@ const filterAndClear = () => {
 <template>
   <div class="flex justify-center">
     <div class="flex col wrapper">
+ <input
+        type="text"
+        label="bar_code"
+        placeholder="Bar code"
+        class="input mt-md"
+        v-model="code"
+        @keypress.enter="filterAndClear()"
+      />
       <input
         type="text"
         placeholder="Nomi bo'yicha"
@@ -53,14 +61,7 @@ const filterAndClear = () => {
         class="input"
         @keypress.enter="store.filterProductsByName(name)"
       />
-      <input
-        type="text"
-        label="bar_code"
-        placeholder="Bar code"
-        class="input mt-md"
-        v-model="code"
-        @keypress.enter="filterAndClear()"
-      />
+     
       <div class="section flex between">
         <div class="info">
           <div class="flex" style="font-size: larger; font-weight: bolder">
