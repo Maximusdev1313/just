@@ -47,7 +47,7 @@ const filterAndClear = () => {
     <div class="flex col wrapper">
  <input
         type="text"
-        label="bar_code"
+name="barcode"
         placeholder="Bar code"
         class="input mt-md"
         v-model="code"
