@@ -8,12 +8,18 @@
 } */
 #app {
   box-sizing: border-box;
-  background-color: var(#fff);
-  color: var(#000);
+  background-color: var(#fff) !important;
+  color: var(#000) !important;
+}
+
+
+.card {
+  background: var(--tg-secondary-bg);
 }
 
 body {
-
+  background: var(--tg-bg-color);
+  color: var(--tg-text-color);
   margin: 0;
   box-sizing: border-box;
   transition:
