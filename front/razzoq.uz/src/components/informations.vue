@@ -36,7 +36,7 @@
 }
 .icon {
   color: green;
-  z-index: 5;
+  z-index: 1;
 }
 
 .title {

@@ -7,16 +7,20 @@ import App from './App.vue'
 import router from './router'
 const tg = window.Telegram.WebApp;
 
-function applyTelegramColors() {
-    const theme = tg.themeParams;
 
-    document.documentElement.style.setProperty('--tg-bg-color', theme.bg_color || '#ffffff');
-    document.documentElement.style.setProperty('--tg-text-color', theme.text_color || '#000000ff');
-    document.documentElement.style.setProperty('--tg-hint-color', theme.hint_color || '#888888');
-    document.documentElement.style.setProperty('--tg-secondary-bg', theme.secondary_bg_color || '#f0f0f0');
+
+function applyMode() {
+    const mode = tg.colorScheme; // "light" or "dark"
+
+    document.documentElement.classList.remove("tg-light", "tg-dark");
+    document.documentElement.classList.add(`tg-${mode}`);
 }
 
-applyTelegramColors();
+applyMode();
+
+// If user switches theme in Telegram while your app is open
+tg.onEvent("themeChanged", applyMode);
+
 
 const app = createApp(App)
 
