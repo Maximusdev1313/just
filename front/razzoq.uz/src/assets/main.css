@@ -24,6 +24,7 @@ html.tg-light {
 html.tg-dark {
   --bg: #fff;
   --text: #0000;
+
   --card-bg: #fff;
   --primary: #4da3ff;
 }

@@ -88,7 +88,7 @@ watchEffect(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  color: rgb(57, 57, 57);
+  color: rgb(0, 0, 0);
 }
 .qty-input {
   border: none;

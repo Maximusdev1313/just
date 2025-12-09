@@ -79,7 +79,7 @@ const { products } = toRefs(props);
 .card__category {
   text-transform: capitalize;
   font-size: small;
-  color: rgb(151, 150, 150);
+  color: rgb(0, 0, 0);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -90,12 +90,12 @@ const { products } = toRefs(props);
   white-space: nowrap;
   text-overflow: ellipsis;
   font-weight: 600;
-  color: rgb(78, 78, 79);
+  color: rgb(0, 0, 0);
   text-transform: capitalize;
 }
 .card__price {
   font-weight: bold;
-  color: grey;
+  color: rgb(0, 0, 0);
   font-size: small;
 }
 .button {
@@ -123,7 +123,7 @@ const { products } = toRefs(props);
 .text {
   font-size: small;
   text-align: center;
-  background-color: grey;
+  background-color: rgb(0, 0, 0);
   padding: 0 !important;
 }
 .card__heart {

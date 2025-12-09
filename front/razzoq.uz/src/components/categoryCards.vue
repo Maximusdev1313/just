@@ -116,7 +116,7 @@ img {
 } */
 .card__title {
   font-size: 20px;
-  color: rgb(82, 81, 81);
+  color: rgb(0, 0, 0);
   font-weight: 500;
 }
 .card__sub-title {

@@ -36,7 +36,7 @@
 }
 .icon {
   color: green;
-  z-index: 1;
+  z-index: -1;
 }
 
 .title {
@@ -46,6 +46,6 @@
 .sub-title {
   font-size: small;
 
-  color: grey;
+  color: rgb(0, 0, 0);
 }
 </style>

@@ -67,7 +67,7 @@ function saveCartItems() {
   display: flex;
   justify-content: space-between;
 
-  color: rgb(83, 82, 82);
+  color: rgb(0, 0, 0);
 }
 .button {
   width: 100%;

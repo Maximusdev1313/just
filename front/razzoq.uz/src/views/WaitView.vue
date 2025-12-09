@@ -94,7 +94,7 @@ onUnmounted(() => {
   font-weight: bolder;
   text-align: center;
   margin: 10px 0;
-  color: rgb(90, 89, 89);
+  color: rgb(0, 0, 0);
 }
 ul {
   padding: 10px 10px;
@@ -118,7 +118,7 @@ ul {
 }
 .devider {
   width: 100%;
-  border: 1px solid grey;
+  border: 1px solid rgb(62, 62, 62);
   margin: 10px 0;
 }
 </style>
