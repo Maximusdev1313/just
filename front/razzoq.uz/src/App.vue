@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from "vue-router";
 import { ref } from "vue";
+import { onMounted } from "vue";
 import searchBar from "./components/searchBar.vue";
 import navMenu from "./components/navMenu.vue";
 const router = useRouter();
@@ -12,6 +13,15 @@ router.afterEach((to, from) => {
   } else {
     isOnCart.value = false;
   }
+});
+
+onMounted(() => {
+  const tg = window.Telegram.WebApp;
+
+  tg.expand(); // Makes app fullscreen
+  tg.ready(); // Tells Telegram your app is loaded
+
+  console.log("User:", tg.initDataUnsafe.user);
 });
 </script>
 
