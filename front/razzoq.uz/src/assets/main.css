@@ -6,47 +6,56 @@
   padding: 2rem;
   font-weight: normal;
 } */
-#app{
+#app {
   box-sizing: border-box;
+  background-color: var(#fff);
+  color: var(#000);
 }
 
-body{
+body {
+
   margin: 0;
   box-sizing: border-box;
   transition:
-  color 0.5s,
-  background-color 0.5s;
-line-height: 1.6;
-font-family:
--apple-system,
-  Inter,
-  BlinkMacSystemFont,
-  'Segoe UI',
-  Roboto,
-  Oxygen,
-  Ubuntu,
-  Cantarell,
-  'Fira Sans',
-  'Droid Sans',
-  'Helvetica Neue',
-  sans-serif;
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    -apple-system,
+    Inter,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
 }
-button{
+
+button {
   text-transform: uppercase;
 }
+
 .wrapper {
   width: 90%;
   margin: 0 auto;
 }
-.flex{
+
+.flex {
   display: flex;
 }
-.justify-between{
+
+.justify-between {
   justify-content: space-between;
 }
-.items-center{
+
+.items-center {
   align-items: center;
 }
+
 /* 
 a,
 .green {
