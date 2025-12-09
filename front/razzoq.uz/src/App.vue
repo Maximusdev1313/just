@@ -40,10 +40,6 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
-.page-wrapper {
-  background: var(--tg-bg-color);
-  color: var(--tg-text-color);
-}
 header {
   width: 100%;
   height: 60px;
