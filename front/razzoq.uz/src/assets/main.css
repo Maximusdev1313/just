@@ -22,7 +22,7 @@
 /* Light mode */
 html.tg-light {
   --bg: #ffffff;
-  --text: #0000;
+  --text: #000000;
   --card-bg: #f5f5f5;
   --primary: #1a73e8;
 }
@@ -30,7 +30,7 @@ html.tg-light {
 /* Dark mode */
 html.tg-dark {
   --bg: #fff;
-  --text: #0000;
+  --text: #000000;
 
   --card-bg: #fff;
   --primary: #4da3ff;
@@ -45,7 +45,7 @@ html.tg-dark {
 
 body {
   background: var(--bg);
-  color: var(--text);
+  color: #000;
   margin: 0;
   box-sizing: border-box;
   transition:
