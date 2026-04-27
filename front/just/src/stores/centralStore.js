@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserv.netlify.app/.netlify/functions/app/api',
+    api: 'https://justserv.netlify.app/.netlify/functions/app/',
     items: [],
     itemsForSell: [],
     cartOpen: false,
@@ -118,7 +118,7 @@ export const useCentralStore = defineStore('central', {
             client_name: product.clientName,
             client_number: product.clientNumber,
             client_address: product.clientAddress,
-            
+
           //   product.clientName = this.clientName
           // product.clientNumber = this.clientNumber
           // product.clientAddress = this.clientAddress

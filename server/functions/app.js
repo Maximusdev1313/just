@@ -19,9 +19,7 @@ process.env.TZ = "Asia/Tashkent";
 // =======================
 // ✅ CORS (safe fallback)
 // =======================
-app.use(cors({
-  origin: "*", // change later if needed
-}));
+app.use(cors({ origin: ['https://razzoq.uz', 'http://localhost:5173', 'https://razzoq.netlify.app', 'http://localhost:5174', 'https://justuz.netlify.app',] }))
 
 // =======================
 // ✅ Body parsers
