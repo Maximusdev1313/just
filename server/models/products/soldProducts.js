@@ -49,6 +49,18 @@ const soldProductSchema = mongoose.Schema({
     image_link: {
         type: String
     },
+    client_name: {
+        type: String,
+        default: ''
+    },
+    client_number: {
+        type: String,
+        default: ''
+    },
+    client_address: {
+        type: String,
+        default: ''
+    },
     created: {
         type: Date,
         default: Date.now()

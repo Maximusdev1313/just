@@ -1,105 +1,112 @@
 <script setup>
 import axios from "axios";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useCentralStore } from "../../stores/centralStore";
+import RemoveBg from "./removeBg.vue";
+
 const store = useCentralStore();
-let name = ref();
-let bar_code = ref();
-let category = ref();
-let entry_price = ref();
-let price = ref();
-let quantity_in_store = ref();
-let size = ref();
 
-let product_sizes = ref(["kg", "ta"]);
-let categorys = ref([
-  { name: " Un maxsulotlari " },
-  { name: " Go'sht maxsulotlari " },
-  { name: " Ichimliklar " },
-  { name: " Qadoqlangan maxsulotlar " },
-]);
-let productDetails = computed(() => ({
-  name: name.value,
-  category: category.value,
-  market_name: store.user.market_name,
-  entry_price: entry_price.value,
-  bar_code: bar_code.value,
-  price: price.value,
-  quantity_in_store: quantity_in_store.value,
-  size: size.value,
-}));
-let PostProduct = async (api, product) => {
-  try {
-    let a = await axios.post(store.api + api, product);
-    product.bar_code = "";
-    console.log(a.data);
-  } catch (error) {
-    alert(error.response.data.message);
-  }
-};
+/* -------------------- FORM STATE -------------------- */
+const name = ref("");
+const bar_code = ref("");
+const category = ref("");
+const entry_price = ref("");
+const price = ref("");
+const quantity_in_store = ref("");
+const size = ref("");
 
-let Post = async (product) => {
+/* -------------------- CONSTANTS -------------------- */
+const product_sizes = ["kg", "ta"];
+const categories = [
+  { name: "Un maxsulotlari" },
+  { name: "Go'sht maxsulotlari" },
+  { name: "Ichimliklar" },
+  { name: "Qadoqlangan maxsulotlar" },
+];
+
+/* -------------------- POST PRODUCT -------------------- */
+const postProduct = async () => {
   if (
-    !product.bar_code ||
-    !product.price ||
-    !product.entry_price ||
-    !product.name ||
-    !product.quantity_in_store
+    !name.value ||
+    !bar_code.value ||
+    !price.value ||
+    !entry_price.value ||
+    !quantity_in_store.value
   ) {
     alert("Iltimos barcha kataklarni to'ldiring!");
     return;
-  } else {
-    console.log(productDetails.value);
-    PostProduct("/products", product);
-    store.postEntryProducts(product);
+  }
+
+  try {
+    const formData = new FormData();
+
+    formData.append("name", name.value);
+    formData.append("category", category.value);
+    formData.append("market_name", store.user.market_name);
+    formData.append("entry_price", entry_price.value);
+    formData.append("bar_code", bar_code.value);
+    formData.append("price", price.value);
+    formData.append("quantity_in_store", quantity_in_store.value);
+    formData.append("size", size.value);
+
+    /* ⬅ IMAGE FROM removeBg COMPONENT */
+    if (store.removedBgImage) {
+      formData.append("image", store.removedBgImage);
+    }
+
+    const res = await axios.post(store.api + "/products", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    console.log("Product saved:", res.data);
+
+    /* Reset form */
+    name.value = "";
+    bar_code.value = "";
+    entry_price.value = "";
+    price.value = "";
+    quantity_in_store.value = "";
+    size.value = "";
+    category.value = "";
+  } catch (error) {
+    alert(error.response?.data?.message || "Xatolik yuz berdi");
   }
 };
 </script>
-
 <template>
   <div class="w-100 flex justify-center wrap">
     <div class="w-100 text-center">
-      <h3>Maxsulot qo'shish</h3>
+      <h3>Mahsulot qo'shish</h3>
     </div>
 
+    <!-- Background remover -->
+    <RemoveBg />
+
     <div class="form flex justify-center wrap">
-      <input v-model="name" placeholder="Maxsulot Nomi" />
-      <input v-model="bar_code" placeholder="Bar Kodi" />
-      <input
-        v-model="category"
-        list="countries"
-        name="country"
-        placeholder="Kartigoriya"
-      />
-      <datalist id="countries">
-        <option
-          v-for="category in categorys"
-          :key="category"
-          :value="category.name"
-        />
+      <input v-model="name" placeholder="Mahsulot Nomi" />
+      <input v-model="bar_code" placeholder="Bar Code" />
+
+      <input v-model="category" list="categories" placeholder="Kategoriya" />
+
+      <datalist id="categories">
+        <option v-for="c in categories" :key="c.name" :value="c.name" />
       </datalist>
 
-      <input v-model="entry_price" placeholder=" Kelgan narxi " />
-      <input v-model="price" placeholder=" Sotilish Narxi " />
+      <input v-model="entry_price" placeholder="Kelgan narxi" />
+      <input v-model="price" placeholder="Sotilish narxi" />
+
       <div class="w-100 flex mt-md mb-md">
-        <span>Maxsulot turi</span>
-        <div
-          class="text-center w-50px"
-          v-for="product_size in product_sizes"
-          :key="product_size"
-        >
-          <input
-            class="input_radio"
-            type="radio"
-            v-model="size"
-            :value="product_size"
-          />
-          <label> {{ product_size }} </label>
+        <span>Mahsulot turi</span>
+        <div v-for="ps in product_sizes" :key="ps" class="text-center w-50px">
+          <input type="radio" class="input_radio" v-model="size" :value="ps" />
+          <label>{{ ps }}</label>
         </div>
       </div>
+
       <input v-model="quantity_in_store" placeholder="Miqdori" />
+
       <div class="w-100 flex justify-end">
-        <button @click="Post(productDetails)">Qo'shish</button>
+        <button @click="postProduct">Qo'shish</button>
       </div>
     </div>
   </div>

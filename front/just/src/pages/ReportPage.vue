@@ -29,68 +29,64 @@ const all_cost_by_outlays = ref(0);
 const orders = ref([]);
 // Function to get items based on date range and filter them by status
 async function getItems() {
-  isLoading.value = true
-  try{
+  isLoading.value = true;
+  try {
     // Fetching filtered items and outlays concurrently using Promise.all
-  [filteredItems.value, outlays.value, orders.value] = await Promise.all([
-    store.filterByDateRange(date1.value, date2.value, "sold-products"),
-    store.filterByDateRange(date1.value, date2.value, "outlays"),
-    store.filterByDateRange(date1.value, date2.value, "orders"),
-  ]);
+    [filteredItems.value, outlays.value, orders.value] = await Promise.all([
+      store.filterByDateRange(date1.value, date2.value, "sold-products"),
+      store.filterByDateRange(date1.value, date2.value, "outlays"),
+      store.filterByDateRange(date1.value, date2.value, "orders"),
+    ]);
 
-  // Filtering items by status
-  by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
-  by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
-  console.log(orders.value, "fil;");
-  if (filteredItems.value.length > 0) {
-    Object.assign(
-      state,
-      store.calculateTotalValueAndProfit(filteredItems.value)
+    console.log(outlays.value, "fil;");
+    // Filtering items by status
+    by_card.value = store.filterItems(filteredItems.value, "status", "by_card");
+    by_dept.value = store.filterItems(filteredItems.value, "status", "dept");
+    if (filteredItems.value.length > 0) {
+      Object.assign(
+        state,
+        store.calculateTotalValueAndProfit(filteredItems.value),
+      );
+    }
+    all_cost_by_card.value =
+      by_card.value.length > 0
+        ? store.calculateTotalValueAndProfit(by_card.value)
+        : {};
+    all_cost_by_debt.value =
+      by_dept.value.length > 0
+        ? store.calculateTotalValueAndProfit(by_dept.value)
+        : {};
+    // Filtering outlays for market
+    const oulays_for_market = store.filterItems(
+      outlays.value,
+      "status",
+      "for_market",
     );
-  }
-  all_cost_by_card.value =
-    by_card.value.length > 0
-      ? store.calculateTotalValueAndProfit(by_card.value)
-      : {};
-  all_cost_by_debt.value =
-    by_dept.value.length > 0
-      ? store.calculateTotalValueAndProfit(by_dept.value)
-      : {};
-  // Filtering outlays for market
-  const oulays_for_market = store.filterItems(
-    outlays.value,
-    "status",
-    "for_market"
-  );
-  // Function to calculate total outlays
-  const calculateTotalOutlays = (outlays) => {
-    if (!Array.isArray(outlays)) {
-      throw new Error("Invalid input: outlays must be an array");
-    }
-    return outlays.reduce((totalOutlay, item) => {
-      if (typeof item.price !== "number") {
-        throw new Error("Invalid item: price must be a number");
+    // Function to calculate total outlays
+    const calculateTotalOutlays = (outlays) => {
+      if (!Array.isArray(outlays)) {
+        throw new Error("Invalid input: outlays must be an array");
       }
-      return totalOutlay + item.price;
-    }, 0);
-  };
-  // Calculating total outlays for market and all outlays
-  all_outlays_for_market.value = calculateTotalOutlays(oulays_for_market);
-  all_cost_by_outlays.value = calculateTotalOutlays(outlays.value);
-  
-  }
-  catch(error){
-    isLoading.value = false
-    console.log('Error from calculating: ',error);
-    if(confirm("Yangilash")){
-      window.location.reload()
+      return outlays.reduce((totalOutlay, item) => {
+        if (typeof item.price !== "number") {
+          throw new Error("Invalid item: price must be a number");
+        }
+        return totalOutlay + item.price;
+      }, 0);
+    };
+    // Calculating total outlays for market and all outlays
+    all_outlays_for_market.value = calculateTotalOutlays(oulays_for_market);
+    all_cost_by_outlays.value = calculateTotalOutlays(outlays.value);
+    console.log(by_dept, "qarz");
+  } catch (error) {
+    isLoading.value = false;
+    console.log("Error from calculating: ", error);
+    if (confirm("Yangilash")) {
+      window.location.reload();
     }
-    
+  } finally {
+    isLoading.value = false;
   }
-  finally{
-    isLoading.value = false
-  }
-  
 }
 
 watch([() => date1.value, () => date2.value], () => {
@@ -98,11 +94,10 @@ watch([() => date1.value, () => date2.value], () => {
     getItems();
   }
 });
-
 </script>
 
 <template>
-  <div class="flex col item-center" >
+  <div class="flex col item-center">
     <div class="title">
       {{ store.user.market_name.toUpperCase() }}
     </div>
@@ -120,8 +115,8 @@ watch([() => date1.value, () => date2.value], () => {
     <div class="devider"></div>
 
     <div class="info mt-xl" v-if="filteredItems.length && !isLoading">
-        <div class="informations flex between">
-          <div class="total-values" v-if="state.totalValue">
+      <div class="informations flex between">
+        <div class="total-values" v-if="state.totalValue">
           <div class="">Umumiy sotilgan: {{ state.totalValue }} so'm</div>
           <div class="">
             Umumiy kelgan narxi:
@@ -182,7 +177,6 @@ watch([() => date1.value, () => date2.value], () => {
       />
     </div>
     <loader v-else-if="isLoading" />
-    
   </div>
 </template>
 <style scoped>

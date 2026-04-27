@@ -15,7 +15,7 @@ app.use(cors({ origin: ['https://razzoq.uz', 'http://localhost:5173', 'https://r
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static('uploads'))
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 // database connection
 mongoose.connect(process.env.DB_URI, {

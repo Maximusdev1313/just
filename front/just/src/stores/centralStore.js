@@ -26,7 +26,8 @@ export const useCentralStore = defineStore('central', {
     orders: [],
     clientName: '',
     clientNumber: '',
-    clientAddress:''
+    clientAddress: '',
+    removedBgImage: null,
   }),
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -84,7 +85,7 @@ export const useCentralStore = defineStore('central', {
       try {
         const response = await axios.get(`${this.api}/orders`)
         this.orders = response.data.reverse()
-       
+
       } catch (error) {
         console.log(error);
       }
@@ -113,7 +114,16 @@ export const useCentralStore = defineStore('central', {
             size: product.size,
             market_name: user.market_name,
             created: product.created,
-            status: product.status
+            status: product.status,
+            client_name: product.clientName,
+            client_number: product.clientNumber,
+            client_address: product.clientAddress,
+            
+          //   product.clientName = this.clientName
+          // product.clientNumber = this.clientNumber
+          // product.clientAddress = this.clientAddress
+          // product.salesman = this.user.name
+
           })
 
           // Assign the response message to this.itemForShow
@@ -170,10 +180,10 @@ export const useCentralStore = defineStore('central', {
 
       const report = await this.getReport(specialApi);
       console.log(report, 'report');
-      
+
       const items = this.filterProductsByMarketName(report, this.user)
       console.log(items, 'items');
-      
+
       // Create a new Date object for the start date and set the time to the start of the day
       let start = new Date(startDate);
       start.setHours(0, 0, 0, 0);
@@ -190,7 +200,7 @@ export const useCentralStore = defineStore('central', {
         // Return true if the created date is within the start and end dates, false otherwise
         return createdDate >= start && createdDate <= end;
       });
-      console.log(filteredItems);
+      console.log(filteredItems, 'filitems');
       // Return the filtered items
       return filteredItems;
     },
@@ -233,31 +243,31 @@ export const useCentralStore = defineStore('central', {
     },
     filterProductsByName(name) {
       console.log(name);
-      
+
       const filteredItem = this.products.filter(item => item.name.toLowerCase().includes(name.toLowerCase()));
       console.log(filteredItem.length);
-      
-      if(filteredItem.length === 1){
-        
+
+      if (filteredItem.length === 1) {
+
         this.addToCart(filteredItem[0])
         this.items = []
-        
-        this.cartOpen=false
-      }else if(filteredItem.length>1){
+
+        this.cartOpen = false
+      } else if (filteredItem.length > 1) {
         this.items = filteredItem.slice(-30)
         console.log(this.items);
         this.cartOpen = true
       }
-      else{
+      else {
         this.items = []
-        this.cartOpen=true
+        this.cartOpen = true
       }
-      if(name.startsWith('rqt')){
+      if (name.startsWith('rqt')) {
         this.clientName = prompt("Mijoz ismini kiriting", "ali")
         this.clientNumber = prompt("Mijoz raqamini kiriting", "99 999 99 99")
         this.clientAddress = prompt("Mijoz manzilini kiriting", "Damko'l, hosil ko'cha 16-uy")
       }
-      
+
     },
     filterProductsByCode(code) {
       this.items = this.products.filter(item => item.bar_code == code);
@@ -404,6 +414,7 @@ export const useCentralStore = defineStore('central', {
           product.clientNumber = this.clientNumber
           product.clientAddress = this.clientAddress
           product.salesman = this.user.name
+          
           console.log(product);
         });
 
@@ -419,7 +430,7 @@ export const useCentralStore = defineStore('central', {
         // Clear the items for sell
         this.itemsForSell = []
         this.clientName = ''
-        this.clientAddress=''
+        this.clientAddress = ''
         this.clientNumber = ''
 
       }

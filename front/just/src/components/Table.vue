@@ -51,9 +51,9 @@ const patchProducts = async (product) => {
         size: product.size,
         quantity_in_store: product.quantity_in_store,
         quantity: product.quantity,
-        store_name: store.user.store_name, 
+        store_name: store.user.store_name,
         created: product.created,
-      }
+      },
     );
     console.log(response.data);
   } catch (error) {
@@ -77,6 +77,7 @@ const patchProducts = async (product) => {
           <th>Soni</th>
           <th>Summa</th>
           <th>Vaqt</th>
+          <th>Kim tomonidan</th>
         </tr>
         <tr
           class="product-row"
@@ -87,8 +88,8 @@ const patchProducts = async (product) => {
             product.status == 'dept'
               ? 'red'
               : product.status == 'by_card'
-              ? 'green'
-              : ''
+                ? 'green'
+                : ''
           "
         >
           <td class="name">
@@ -102,6 +103,7 @@ const patchProducts = async (product) => {
           <td>{{ product.quantity }} {{ product.size }}</td>
           <td>{{ product.quantity * product.price }} so'm</td>
           <td>{{ store.formatHours(product.created) }}</td>
+          <td>{{}}</td>
           <!-- <td>
             <div class="button-group" v-if="product.status != 'dept'">
               <div class="functional-buttons">
