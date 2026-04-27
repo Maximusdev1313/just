@@ -1,40 +1,114 @@
-require('dotenv').config()
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors')
-const smsController = require('../controllers/smsController');
-const app = express()
+// Load .env only in local dev
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const serverless = require("serverless-http");
 
+const smsController = require("../controllers/smsController");
+
+const app = express();
 const router = express.Router();
 
-const port = process.env.PORT || 5000
-process.env.TZ = "Asia/Tashkent"
+// timezone
+process.env.TZ = "Asia/Tashkent";
 
-app.use(cors({ origin: ['https://razzoq.uz', 'http://localhost:5173', 'https://razzoq.netlify.app', 'http://localhost:5174', 'https://justuz.netlify.app',] }))
+// =======================
+// ✅ CORS (safe fallback)
+// =======================
+app.use(cors({
+  origin: "*", // change later if needed
+}));
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use('/uploads', express.static(__dirname + '/uploads'));
+// =======================
+// ✅ Body parsers
+// =======================
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// database connection
-mongoose.connect(process.env.DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log("Database connected")
-}).catch(err => console.log(err))
+// =======================
+// ❌ Static uploads (disabled for Netlify)
+// =======================
+// app.use('/uploads', express.static(__dirname + '/uploads'));
 
-//routes
-router.use('/api/products', require('../routes/productRoutes'))
-router.use('/api/sold-products', require('../routes/soldProductRoutes'))
-router.use('/api/return-products', require('../routes/returnProductRoutes'))
-router.use('/api/entry-products', require('../routes/entryProductRoutes'))
-router.use('/api/outlays', require('../routes/outlayRoutes'))
-router.use('/api', require('../routes/users/userRoutes'))
-router.use('/api/orders', require('../routes/orderRoutes'))
-router.post('/send-sms', smsController.sendSMS);
+// =======================
+// ✅ DB connection (cached)
+// =======================
+let isConnected = false;
 
-app.use(`/.netlify/functions/app`, router);
+const connectDB = async () => {
+  if (isConnected) return;
 
+  if (!process.env.DB_URI) {
+    throw new Error("DB_URI is NOT defined in environment variables");
+  }
+
+  try {
+    const db = await mongoose.connect(process.env.DB_URI);
+    isConnected = db.connections[0].readyState;
+
+    console.log("✅ MongoDB connected");
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err.message);
+    throw err;
+  }
+};
+
+// =======================
+// ✅ Ensure DB per request
+// =======================
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    return res.status(500).json({
+      error: "Database connection failed",
+      details: err.message,
+    });
+  }
+});
+
+// =======================
+// ✅ Debug route
+// =======================
+router.get("/test", (req, res) => {
+  res.json({ ok: true });
+});
+// =======================
+// ✅ Routes (FIXED: no /api duplication)
+// =======================
+router.use("/products", require("../routes/productRoutes"));
+router.use("/sold-products", require("../routes/soldProductRoutes"));
+router.use("/return-products", require("../routes/returnProductRoutes"));
+router.use("/entry-products", require("../routes/entryProductRoutes"));
+router.use("/outlays", require("../routes/outlayRoutes"));
+router.use("/", require("../routes/users/userRoutes"));
+router.use("/orders", require("../routes/orderRoutes"));
+
+
+
+// =======================
+// ✅ Mount router for Netlify
+// =======================
+app.use("/.netlify/functions/app", router);
+
+// =======================
+// ✅ Global error handler
+// =======================
+app.use((err, req, res, next) => {
+  console.error("🔥 GLOBAL ERROR:", err);
+
+  res.status(500).json({
+    message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+  });
+});
+
+// =======================
+// ✅ Export handler
+// =======================
 module.exports.handler = serverless(app);

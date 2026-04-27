@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted} from "vue";
+import { ref, onMounted } from "vue";
 import { useCentralStore } from "../stores/centralStore";
 import vioceRecognition from "../components/vioceRecognition.vue";
 
@@ -122,7 +122,7 @@ const postSoldProducts = async () => {
 
     isActive.value = false;
     localStorage.removeItem("productsForSell");
-    location.reload();
+    // location.reload();
   }
 };
 </script>
@@ -133,7 +133,6 @@ const postSoldProducts = async () => {
         <div class="drawer-wrapper">
           <div class="drawer">
             <div class="content">
-
               <button
                 @click="store.addClient(clients.length)"
                 class="button"
@@ -159,7 +158,7 @@ const postSoldProducts = async () => {
       </aside>
       <div class="functional-section">
         <div class="search-inputs">
-          <vioce-recognition/>
+          <vioce-recognition />
           <searchInputs />
 
           <productsForChoosing v-if="store.cartOpen" />
@@ -222,7 +221,7 @@ const postSoldProducts = async () => {
           mahsulotlar
         </button></router-link
       >
-      <button @click="(isOutlay = true), (store.otherComponentOpened = true)">
+      <button @click="((isOutlay = true), (store.otherComponentOpened = true))">
         Chiqimlar
       </button>
       <router-link to="/auth"

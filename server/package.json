@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon functions/app.js",
-    "start": "./node_modules/.bin/netlify-lambda serve src",
+    "start": "netlify dev",
     "build": "netlify deploy --prod"
   },
   "keywords": [],
@@ -27,7 +27,6 @@
     "mongoose": "^7.5.0",
     "multer": "^1.4.5-lts.1",
     "netlify-cli": "^17.23.1",
-    "netlify-lambda": "^2.0.15",
     "pusher": "^5.1.3",
     "serverless-http": "^2.7.0"
   },
