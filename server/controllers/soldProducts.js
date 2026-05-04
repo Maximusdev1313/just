@@ -80,6 +80,37 @@ module.exports = class Products {
             res.status(404).json({ message: error.message })
         }
     })
+static filterDepsByClientName = asyncHandler(async (req, res) => {
+    const query = req.query.q;
+    console.log("Search query:", query);
 
+    if (!query) {
+        return res.status(400).json({ message: "Query is required" });
+    }
+
+    const sanitizedQuery = query.replace(/\s+/g, '');
+
+    const filteredData = await soldProduct.aggregate([
+        {
+            $addFields: {
+                client_number_clean: {
+                    $replaceAll: { input: "$client_number", find: " ", replacement: "" }
+                }
+            }
+        },
+        {
+            $match: {
+                status: "dept", // ✅ only dept records
+                $or: [
+                    { client_name: { $regex: query, $options: 'i' } },
+                    { client_number_clean: { $regex: sanitizedQuery, $options: 'i' } }
+                ]
+            }
+        }
+    ]);
+
+    console.log("Results found:", filteredData.length);
+    res.json(filteredData);
+});
 
 }

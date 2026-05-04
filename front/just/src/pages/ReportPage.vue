@@ -81,9 +81,9 @@ async function getItems() {
   } catch (error) {
     isLoading.value = false;
     console.log("Error from calculating: ", error);
-    if (confirm("Yangilash")) {
-      window.location.reload();
-    }
+    // if (confirm("Yangilash")) {
+    //   // window.location.reload();
+    // }
   } finally {
     isLoading.value = false;
   }
@@ -105,6 +105,9 @@ watch([() => date1.value, () => date2.value], () => {
       <div class="flex col">
         <router-link to="/addproduct">
           <button>Mahsulot qo'shish</button>
+        </router-link>
+        <router-link to="/credits" class="mt-md">
+          <button>Qarzlar</button>
         </router-link>
         <label for="fdate">Birinchi sana:</label>
         <input type="date" name="fdate" id="" title="date1" v-model="date1" />

@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const useCentralStore = defineStore('central', {
   state: () => ({
-    api: 'https://justserv.netlify.app/.netlify/functions/app/',
+    api: 'http://localhost:8888/.netlify/functions/app',
     items: [],
     itemsForSell: [],
     cartOpen: false,
@@ -262,10 +262,13 @@ export const useCentralStore = defineStore('central', {
         this.items = []
         this.cartOpen = true
       }
-      if (name.startsWith('rqt')) {
+      if (name.startsWith('qrz')) {
         this.clientName = prompt("Mijoz ismini kiriting", "ali")
         this.clientNumber = prompt("Mijoz raqamini kiriting", "99 999 99 99")
+        // this.returnPeriod = prompt("Qaytarish muddati", "3 kun")
         this.clientAddress = prompt("Mijoz manzilini kiriting", "Damko'l, hosil ko'cha 16-uy")
+        
+
       }
 
     },
@@ -400,6 +403,10 @@ export const useCentralStore = defineStore('central', {
 
     sellProducts(status) {
       // Check if there are items to sell
+      if(status == 'dept' && !this.clientName) {
+        alert('Iltimos, avval qrz-terish orqali mijoz ma\'lumotlarini kiriting')
+        return
+      }
       if (this.itemsForSell.length) {
         // Initialize an empty array for items
         let item = []

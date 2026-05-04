@@ -72,25 +72,28 @@ const patchProducts = async (product) => {
         <tr>
           <th class="name">Name</th>
           <th>Barcode</th>
-          <th>Kelgan narxi</th>
           <th>Narxi</th>
           <th>Soni</th>
           <th>Summa</th>
           <th>Vaqt</th>
-          <th>Kim tomonidan</th>
         </tr>
         <tr
           class="product-row"
-          v-for="product in products"
-          :key="product"
+          v-for="(product, index) in products"
+          :key="product.id"
           @dblclick="getProduct(product)"
-          :class="
+          :class="[
             product.status == 'dept'
               ? 'red'
               : product.status == 'by_card'
                 ? 'green'
-                : ''
-          "
+                : '',
+            index === 0 ||
+            store.formatHours(products[index - 1].created) !==
+              store.formatHours(product.created)
+              ? 'group-divider'
+              : '',
+          ]"
         >
           <td class="name">
             {{ product.name }}
@@ -98,12 +101,17 @@ const patchProducts = async (product) => {
           <td>
             {{ product.bar_code }}
           </td>
-          <td>{{ product.entry_price }} so'm</td>
           <td>{{ product.price }} so'm</td>
           <td>{{ product.quantity }} {{ product.size }}</td>
           <td>{{ product.quantity * product.price }} so'm</td>
           <td>{{ store.formatHours(product.created) }}</td>
-          <td>{{}}</td>
+          <td v-if="product.client_name">
+            <div>
+              {{ product.client_name }} ||<br />
+              {{ product.client_address }} || <br />
+              +998 {{ product.client_number }}
+            </div>
+          </td>
           <!-- <td>
             <div class="button-group" v-if="product.status != 'dept'">
               <div class="functional-buttons">
@@ -127,7 +135,7 @@ const patchProducts = async (product) => {
 </template>
 <style scoped>
 .wrapper {
-  margin-top: 50px;
+  margin: 50px 20px;
   max-height: 70vh;
   overflow: auto;
 }
@@ -136,14 +144,16 @@ th,
 td {
   border: 1px solid black;
   border-collapse: collapse;
+  padding: 5px;
+  font-size: 14px;
 }
 .table {
   width: 100%;
   margin: 0 auto;
 }
-.product-row {
+/* .product-row {
   height: 100px;
-}
+} */
 .table-item {
   width: 100%;
 }
@@ -175,7 +185,9 @@ td {
   position: relative;
   display: inline-block;
 }
-
+.group-divider {
+  border-top: 4px solid #b8b3b3;
+}
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;

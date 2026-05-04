@@ -17,14 +17,14 @@ let upload = multer({
 
 const API = require('../controllers/productsController')
 router.get('/', API.fetchAllProducts)
-router.get('/:id', API.fetchProductsId)
 router.post('/', upload, API.createProducts)
+router.patch('/decrement/:id', API.decrementProductsQuantity)
+router.post('/filter-name', API.filterItemsByName)
+router.post('/filter-qr', API.filterItemsByBarCode)
+router.get('/:id', API.fetchProductsId)
 router.patch('/:id', upload, API.updateProducts)
 router.patch('/:name/full', upload, API.fullyUpdateProduct)
 
 router.delete('/:id', API.deleteProducts)
-router.patch('/decrement/:id', API.decrementProductsQuantity)
-router.post('/filter-name', API.filterItemsByName)
-router.post('/filter-qr', API.filterItemsByBarCode)
 
 module.exports = router

@@ -53,7 +53,12 @@ onUnmounted(() => {
           >
             <i class="fa-solid fa-plus"></i>
           </button>
-          <input type="number" v-model="product.quantity" ref="inputRef" />
+          <input
+            type="number"
+            v-model="product.quantity"
+            ref="inputRef"
+            :disabled="product.size == 'ta'"
+          />
           <button
             @click="store.decrementQunatity(product)"
             class="large-button"
@@ -95,7 +100,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 input {
-color: #fff;
+  color: #fff;
   margin: 0 10px;
   height: 30px;
   background-color: transparent;

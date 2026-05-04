@@ -122,7 +122,7 @@ const postSoldProducts = async () => {
 
     isActive.value = false;
     localStorage.removeItem("productsForSell");
-    // location.reload();
+    location.reload();
   }
 };
 </script>

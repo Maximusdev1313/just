@@ -14,7 +14,7 @@ module.exports = class Products {
         }
     })
 
-
+    
     static fetchProductsId = asyncHandler(async (req, res) => {
         const id = req.params.id
         try {
